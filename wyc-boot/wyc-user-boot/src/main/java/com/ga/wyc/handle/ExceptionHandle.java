@@ -36,15 +36,14 @@ public class ExceptionHandle extends ResponseEntityExceptionHandler  {
             ValidException validException= (ValidException) e;
             //验证参数错误
             return  Result.custom().code(validException.getCode())
-                    .message(validException.getMessage())
-                    .data(validException.getDetail());
+                    .message(validException.getMessage()+"，"+validException.getDetail());
         } else if(e instanceof BusinessException){
             BusinessException businessException= (BusinessException) e;
             //业务逻辑异常
-            return Result.fail().data(businessException.getDetail());
+            return Result.fail().message(businessException.getDetail());
         }
         log.error("class:{},detail:{}",e.getClass().getName(),e.getMessage());
-        return Result.unkonw().data(e.getMessage());
+        return Result.unkonw().message(e.getMessage());
     }
 
 }

@@ -9,4 +9,8 @@ public interface IUserService {
       Result refreshToken(String phone,String token,String refreshToken);
 
       Result sendSmsLogin(String phone);
+
+      Result updateInfo(User user);
+
+      Result getInfo(Long id);
 }

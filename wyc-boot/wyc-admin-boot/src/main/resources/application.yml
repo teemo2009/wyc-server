@@ -10,7 +10,7 @@ spring:
         druid:
           filters: stat
           driver-class-name: com.mysql.jdbc.Driver
-          url: jdbc:mysql://${jdbc.url}:3306/wyc?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true
+          url: jdbc:mysql://${jdbc.url}:3306/wyc?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&useSSL=false
           username: ${jdbc.name}
           password: ${jdbc.password}
           initial-size: 1

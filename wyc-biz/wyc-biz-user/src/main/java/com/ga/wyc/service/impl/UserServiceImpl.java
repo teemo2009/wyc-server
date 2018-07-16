@@ -114,9 +114,21 @@ public class UserServiceImpl implements IUserService {
         //电话号码是否已经发送过电话号码
         String key = REDIS_SMS + VerifyCode.Type.LOGIN + ":" + phone;
         if (redisUtil.hasKey(key)) {
-            throw new BusinessException("验证码已发送，3分钟内不能重复发送");
+            throw new BusinessException("验证码已发送，90秒内不能重复发送");
         }
-        redisUtil.put(key, TEST_CODE, 3L, TimeUnit.MINUTES);
+        redisUtil.put(key, TEST_CODE, 90L, TimeUnit.SECONDS);
         return Result.success().message("验证码发送成功，注意查收");
+    }
+
+    @Override
+    public Result updateInfo(User user) {
+       userMapper.updateByPrimaryKeySelective(user);
+       return Result.success().message("个人信息更新成功");
+    }
+
+    @Override
+    public Result getInfo(Long id) {
+        User user= userMapper.selectByPrimaryKey(id);
+        return Result.success().data(user);
     }
 }
