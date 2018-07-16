@@ -2,10 +2,7 @@ package com.ga.wyc.service.impl;
 
 import com.ga.wyc.RedisUtil;
 import com.ga.wyc.dao.UserMapper;
-import com.ga.wyc.domain.bean.BusinessException;
-import com.ga.wyc.domain.bean.Result;
-import com.ga.wyc.domain.bean.ValidException;
-import com.ga.wyc.domain.bean.VerifyCode;
+import com.ga.wyc.domain.bean.*;
 import com.ga.wyc.domain.dto.UserDTO;
 import com.ga.wyc.domain.entity.User;
 import com.ga.wyc.service.IUserService;
@@ -90,6 +87,29 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
+    public Result autoLogin(String phone, String token) {
+        String userKey = REDIS_USER + phone;
+        //判断token是否异常
+        if(!redisUtil.hasKey(userKey)){
+            throw new TokenLoseException();
+        }
+        UserDTO userDTO= redisUtil.get(userKey);
+        if(!userDTO.getToken().equals(token)){
+            //1-在其它手机上重新登陆
+            //2-在其它手机调用了refresh_token接口
+            throw new TokenLoseException();
+        }
+        //重新生成token
+        String newToken = jwtUtil.sign(phone);
+        String newRefreshToken = codeUtil.encode(newToken);
+        //刷新缓存
+        userDTO.setToken(newToken);
+        userDTO.setRefreshToken(newRefreshToken);
+        redisUtil.put(userKey,userDTO);
+        return Result.success().message("自动登陆成功").data(userDTO);
+    }
+
+    @Override
     public Result refreshToken(String phone, String token, String refreshToken) {
         if (!refreshToken.equals(codeUtil.encode(token))) {
             throw new BusinessException("refresh_token校验失败");
@@ -99,6 +119,16 @@ public class UserServiceImpl implements IUserService {
         }
         token = jwtUtil.sign(phone);
         refreshToken = codeUtil.encode(token);
+        String userKey = REDIS_USER + phone;
+        //判断token是否异常
+        if(!redisUtil.hasKey(userKey)){
+           throw new TokenLoseException();
+        }
+        UserDTO userDTO= redisUtil.get(userKey);
+        userDTO.setToken(token);
+        userDTO.setRefreshToken(refreshToken);
+        //刷新缓存中的token
+        redisUtil.put(userKey,userDTO);
         Map map = new HashMap(2);
         map.put("token", token);
         map.put("refreshToken", refreshToken);

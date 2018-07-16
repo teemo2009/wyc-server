@@ -2,6 +2,7 @@ package com.ga.wyc.handle;
 
 import com.ga.wyc.domain.bean.BusinessException;
 import com.ga.wyc.domain.bean.Result;
+import com.ga.wyc.domain.bean.TokenLoseException;
 import com.ga.wyc.domain.bean.ValidException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -41,6 +42,11 @@ public class ExceptionHandle extends ResponseEntityExceptionHandler  {
             BusinessException businessException= (BusinessException) e;
             //业务逻辑异常
             return Result.fail().message(businessException.getDetail());
+        } else if(e instanceof TokenLoseException){
+            //token异常
+            TokenLoseException tokenLoseException= (TokenLoseException) e;
+            return Result.custom().code(tokenLoseException.getCode())
+                    .message(tokenLoseException.getMessage());
         }
         log.error("class:{},detail:{}",e.getClass().getName(),e.getMessage());
         return Result.unkonw().message(e.getMessage());

@@ -8,7 +8,8 @@ public enum ResultEnum {
     //逻辑业务失败
     FAIL(1,"失败"),
     //参数验证错误
-    PARAM_VALID_ERROR(101,"参数验证错误");
+    PARAM_VALID_ERROR(101,"参数验证错误"),
+    TOKEN_LOSE_ERROR(102,"token失效");
 
     private Integer code;
     private String message;

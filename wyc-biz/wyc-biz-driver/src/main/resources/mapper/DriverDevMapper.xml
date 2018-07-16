@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ga.wyc.dao.DriverDevMapper" >
+  <resultMap id="BaseResultMap" type="com.ga.wyc.domain.entity.DriverDev" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="driver_id" property="driverId" jdbcType="BIGINT" />
+    <result column="dev_no" property="devNo" jdbcType="VARCHAR" />
+    <result column="version" property="version" jdbcType="VARCHAR" />
+    <result column="net_type" property="netType" jdbcType="INTEGER" />
+    <result column="os" property="os" jdbcType="VARCHAR" />
+    <result column="map_type" property="mapType" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, driver_id, dev_no, version, net_type, os, map_type, create_time, update_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_driver_dev
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from t_driver_dev
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.ga.wyc.domain.entity.DriverDev" >
+    insert into t_driver_dev (id, driver_id, dev_no, 
+      version, net_type, os, 
+      map_type, create_time, update_time
+      )
+    values (#{id,jdbcType=BIGINT}, #{driverId,jdbcType=BIGINT}, #{devNo,jdbcType=VARCHAR}, 
+      #{version,jdbcType=VARCHAR}, #{netType,jdbcType=INTEGER}, #{os,jdbcType=VARCHAR}, 
+      #{mapType,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.ga.wyc.domain.entity.DriverDev" >
+    insert into t_driver_dev
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="driverId != null" >
+        driver_id,
+      </if>
+      <if test="devNo != null" >
+        dev_no,
+      </if>
+      <if test="version != null" >
+        version,
+      </if>
+      <if test="netType != null" >
+        net_type,
+      </if>
+      <if test="os != null" >
+        os,
+      </if>
+      <if test="mapType != null" >
+        map_type,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="driverId != null" >
+        #{driverId,jdbcType=BIGINT},
+      </if>
+      <if test="devNo != null" >
+        #{devNo,jdbcType=VARCHAR},
+      </if>
+      <if test="version != null" >
+        #{version,jdbcType=VARCHAR},
+      </if>
+      <if test="netType != null" >
+        #{netType,jdbcType=INTEGER},
+      </if>
+      <if test="os != null" >
+        #{os,jdbcType=VARCHAR},
+      </if>
+      <if test="mapType != null" >
+        #{mapType,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ga.wyc.domain.entity.DriverDev" >
+    update t_driver_dev
+    <set >
+      <if test="driverId != null" >
+        driver_id = #{driverId,jdbcType=BIGINT},
+      </if>
+      <if test="devNo != null" >
+        dev_no = #{devNo,jdbcType=VARCHAR},
+      </if>
+      <if test="version != null" >
+        version = #{version,jdbcType=VARCHAR},
+      </if>
+      <if test="netType != null" >
+        net_type = #{netType,jdbcType=INTEGER},
+      </if>
+      <if test="os != null" >
+        os = #{os,jdbcType=VARCHAR},
+      </if>
+      <if test="mapType != null" >
+        map_type = #{mapType,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ga.wyc.domain.entity.DriverDev" >
+    update t_driver_dev
+    set driver_id = #{driverId,jdbcType=BIGINT},
+      dev_no = #{devNo,jdbcType=VARCHAR},
+      version = #{version,jdbcType=VARCHAR},
+      net_type = #{netType,jdbcType=INTEGER},
+      os = #{os,jdbcType=VARCHAR},
+      map_type = #{mapType,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

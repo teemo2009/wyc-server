@@ -28,9 +28,15 @@ public class AccountController {
         return userService.refreshToken(phone, token, refreshToken);
     }
 
+
     @PostMapping("/login")
     public Result login(@RequestParam("phone") String phone, @RequestParam("code") String code) {
         return userService.login(phone, code);
+    }
+
+    @PostMapping("/login/auto")
+    public Result autoLogin(@RequestParam("phone") String phone,@RequestParam("token") String token){
+        return userService.autoLogin(phone, token);
     }
 
 }
