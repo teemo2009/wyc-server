@@ -1,0 +1,19 @@
+  ##图片相关配置
+config:
+  base_path: G:\\wyc
+  pic: ${config.base_path}\\pic
+
+logback:
+  logdir: ${config.base_path}\\log
+  appname: wyc-user
+  ##打印输出等级
+  level: info
+
+jdbc:
+  url: localhost
+  name: root
+  password: root
+
+redis:
+  url: localhost
+  password: jbladmin123

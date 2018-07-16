@@ -1,0 +1,66 @@
+
+
+spring:
+  profiles:
+    active: dev
+  jmx:
+    default-domain: wyc-admin
+  datasource:
+        type: com.alibaba.druid.pool.DruidDataSource
+        druid:
+          filters: stat
+          driver-class-name: com.mysql.jdbc.Driver
+          url: jdbc:mysql://${jdbc.url}:3306/wyc?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true
+          username: ${jdbc.name}
+          password: ${jdbc.password}
+          initial-size: 1
+          min-idle: 1
+          max-active: 20
+          max-wait: 60000
+          time-between-eviction-runs-millis: 60000
+          min-evictable-idle-time-millis: 300000
+          validation-query: SELECT 'x'
+          test-while-idle: true
+          test-on-borrow: false
+          test-on-return: false
+          pool-prepared-statements: false
+          max-pool-prepared-statement-per-connection-size: 20
+  redis:
+       port: 6379
+       host: ${redis.url}
+       password: ${redis.password}
+       database: 1
+       lettuce:
+         pool:
+           max-active: 8
+           max-wait: -1ms
+           max-idle: 500
+           min-idle: 0
+
+
+
+
+mybatis:
+  mapper-locations: classpath*:mapper/*.xml
+
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true
+  support-methods-arguments: true
+  params: countSql
+
+  #JWT配置
+jwt:
+    ###TOKEN有效期 1小时 3600000
+    expire: 3600000
+    salt: wyc-admin&%^&
+  #redis键值对配置
+redis:
+     prefix: 'WYC-ADMIN:'
+     user : '${redis.prefix}USER:'
+     manager: '${redis.prefix}MANAGER:'
+     sms: '${redis.prefix}SMS:'
+     testCode: 6666
+
+server:
+  port: 8072

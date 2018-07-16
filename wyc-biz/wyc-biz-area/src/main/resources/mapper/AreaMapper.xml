@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ga.wyc.dao.AreaMapper" >
+  <resultMap id="BaseResultMap" type="com.ga.wyc.domain.entity.Area" >
+    <id column="adcode" property="adcode" jdbcType="VARCHAR" />
+    <result column="citycode" property="citycode" jdbcType="VARCHAR" />
+    <result column="pdcode" property="pdcode" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="center" property="center" jdbcType="VARCHAR" />
+    <result column="level" property="level" jdbcType="VARCHAR" />
+    <result column="label" property="label" jdbcType="VARCHAR" />
+    <result column="value" property="value" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    adcode, citycode, pdcode, name, center, level, label, value
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_area
+    where adcode = #{adcode,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from t_area
+    where adcode = #{adcode,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.ga.wyc.domain.entity.Area" >
+    insert into t_area (adcode, citycode, pdcode, 
+      name, center, level, 
+      label, value)
+    values (#{adcode,jdbcType=VARCHAR}, #{citycode,jdbcType=VARCHAR}, #{pdcode,jdbcType=VARCHAR}, 
+      #{name,jdbcType=VARCHAR}, #{center,jdbcType=VARCHAR}, #{level,jdbcType=VARCHAR}, 
+      #{label,jdbcType=VARCHAR}, #{value,jdbcType=VARCHAR})
+  </insert>
+  <!--批量添加 -->
+  <insert id="batchInsert" parameterType="java.util.List"
+          useGeneratedKeys="true">
+    insert into t_area(name,citycode,adcode,pdcode,level,center,label,value) values
+    <foreach collection="list" index="index" item="item" open=""
+             close="" separator=",">
+      (#{item.name,jdbcType=VARCHAR},
+      #{item.citycode,jdbcType=VARCHAR},
+      #{item.adcode,jdbcType=VARCHAR},
+      #{item.pdcode,jdbcType=VARCHAR},
+      #{item.level,jdbcType=VARCHAR},
+      #{item.center,jdbcType=INTEGER},
+      #{item.label,jdbcType=INTEGER},
+      #{item.value,jdbcType=INTEGER})
+    </foreach>
+  </insert>
+  <insert id="insertSelective" parameterType="com.ga.wyc.domain.entity.Area" >
+    insert into t_area
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="adcode != null" >
+        adcode,
+      </if>
+      <if test="citycode != null" >
+        citycode,
+      </if>
+      <if test="pdcode != null" >
+        pdcode,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="center != null" >
+        center,
+      </if>
+      <if test="level != null" >
+        level,
+      </if>
+      <if test="label != null" >
+        label,
+      </if>
+      <if test="value != null" >
+        value,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="adcode != null" >
+        #{adcode,jdbcType=VARCHAR},
+      </if>
+      <if test="citycode != null" >
+        #{citycode,jdbcType=VARCHAR},
+      </if>
+      <if test="pdcode != null" >
+        #{pdcode,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="center != null" >
+        #{center,jdbcType=VARCHAR},
+      </if>
+      <if test="level != null" >
+        #{level,jdbcType=VARCHAR},
+      </if>
+      <if test="label != null" >
+        #{label,jdbcType=VARCHAR},
+      </if>
+      <if test="value != null" >
+        #{value,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ga.wyc.domain.entity.Area" >
+    update t_area
+    <set >
+      <if test="citycode != null" >
+        citycode = #{citycode,jdbcType=VARCHAR},
+      </if>
+      <if test="pdcode != null" >
+        pdcode = #{pdcode,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="center != null" >
+        center = #{center,jdbcType=VARCHAR},
+      </if>
+      <if test="level != null" >
+        level = #{level,jdbcType=VARCHAR},
+      </if>
+      <if test="label != null" >
+        label = #{label,jdbcType=VARCHAR},
+      </if>
+      <if test="value != null" >
+        value = #{value,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where adcode = #{adcode,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ga.wyc.domain.entity.Area" >
+    update t_area
+    set citycode = #{citycode,jdbcType=VARCHAR},
+      pdcode = #{pdcode,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      center = #{center,jdbcType=VARCHAR},
+      level = #{level,jdbcType=VARCHAR},
+      label = #{label,jdbcType=VARCHAR},
+      value = #{value,jdbcType=VARCHAR}
+    where adcode = #{adcode,jdbcType=VARCHAR}
+  </update>
+</mapper>
