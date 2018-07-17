@@ -11,6 +11,8 @@ public interface DriverDevMapper {
 
     DriverDev selectByPrimaryKey(Long id);
 
+    DriverDev selectOneSelective(DriverDev record);
+
     int updateByPrimaryKeySelective(DriverDev record);
 
     int updateByPrimaryKey(DriverDev record);

@@ -6,7 +6,7 @@
     <result column="driver_id" property="driverId" jdbcType="BIGINT" />
     <result column="dev_no" property="devNo" jdbcType="VARCHAR" />
     <result column="version" property="version" jdbcType="VARCHAR" />
-    <result column="net_type" property="netType" jdbcType="INTEGER" />
+    <result column="net_type" property="netType" jdbcType="INTEGER" typeHandler="com.ga.wyc.typeHandler.IntEnumTypeHandler"/>
     <result column="os" property="os" jdbcType="VARCHAR" />
     <result column="map_type" property="mapType" jdbcType="INTEGER" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
@@ -21,19 +21,30 @@
     from t_driver_dev
     where id = #{id,jdbcType=BIGINT}
   </select>
+  <select id="selectOneSelective" resultMap="BaseResultMap" parameterType="com.ga.wyc.domain.entity.DriverDev">
+    select
+    <include refid="Base_Column_List" />
+    from t_driver_dev
+    <where>
+      <if test="devNo!=null">
+          AND dev_no=#{devNo,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from t_driver_dev
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.ga.wyc.domain.entity.DriverDev" >
-    insert into t_driver_dev (id, driver_id, dev_no, 
-      version, net_type, os, 
-      map_type, create_time, update_time
-      )
-    values (#{id,jdbcType=BIGINT}, #{driverId,jdbcType=BIGINT}, #{devNo,jdbcType=VARCHAR}, 
-      #{version,jdbcType=VARCHAR}, #{netType,jdbcType=INTEGER}, #{os,jdbcType=VARCHAR}, 
-      #{mapType,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
-      )
+    insert into t_driver_dev (id, driver_id, dev_no,
+    version, net_type, os,
+    map_type, create_time, update_time
+    )
+    values (#{id,jdbcType=BIGINT}, #{driverId,jdbcType=BIGINT}, #{devNo,jdbcType=VARCHAR},
+    #{version,jdbcType=VARCHAR},
+    #{netType,jdbcType=INTEGER,typeHandler=com.ga.wyc.typeHandler.IntEnumTypeHandler}, #{os,jdbcType=VARCHAR},
+    #{mapType,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+    )
   </insert>
   <insert id="insertSelective" parameterType="com.ga.wyc.domain.entity.DriverDev" >
     insert into t_driver_dev
@@ -80,7 +91,7 @@
         #{version,jdbcType=VARCHAR},
       </if>
       <if test="netType != null" >
-        #{netType,jdbcType=INTEGER},
+        #{netType,jdbcType=INTEGER,typeHandler=com.ga.wyc.typeHandler.IntEnumTypeHandler},
       </if>
       <if test="os != null" >
         #{os,jdbcType=VARCHAR},
@@ -109,7 +120,7 @@
         version = #{version,jdbcType=VARCHAR},
       </if>
       <if test="netType != null" >
-        net_type = #{netType,jdbcType=INTEGER},
+        net_type = #{netType,jdbcType=INTEGER,typeHandler=com.ga.wyc.typeHandler.IntEnumTypeHandler},
       </if>
       <if test="os != null" >
         os = #{os,jdbcType=VARCHAR},
@@ -131,7 +142,7 @@
     set driver_id = #{driverId,jdbcType=BIGINT},
       dev_no = #{devNo,jdbcType=VARCHAR},
       version = #{version,jdbcType=VARCHAR},
-      net_type = #{netType,jdbcType=INTEGER},
+      net_type = #{netType,jdbcType=INTEGER,typeHandler=com.ga.wyc.typeHandler.IntEnumTypeHandler},
       os = #{os,jdbcType=VARCHAR},
       map_type = #{mapType,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP},

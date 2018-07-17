@@ -5,17 +5,16 @@
 
 	<groupId>com.ga.wyc</groupId>
 	<artifactId>wyc-driver-boot</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0</version>
 	<packaging>war</packaging>
 
 	<name>wyc-driver-boot</name>
 	<description>Driver project for Wyc</description>
 
 	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.0.3.RELEASE</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<groupId>com.ga.wyc</groupId>
+		<artifactId>wyc-boot</artifactId>
+		<version>1.0</version>
 	</parent>
 
 	<properties>
@@ -29,16 +28,38 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-tomcat</artifactId>
-			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.ga.wyc</groupId>
+			<artifactId>wyc-biz-user</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.ga.wyc</groupId>
+			<artifactId>wyc-biz-area</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.ga.wyc</groupId>
+			<artifactId>wyc-biz-driver</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.ga.wyc</groupId>
+			<artifactId>wyc-http</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.ga.wyc</groupId>
+			<artifactId>wyc-util</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.ga.wyc</groupId>
+			<artifactId>wyc-redis</artifactId>
 		</dependency>
 	</dependencies>
 

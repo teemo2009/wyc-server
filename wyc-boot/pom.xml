@@ -19,6 +19,7 @@
 
     <modules>
         <module>wyc-admin-boot</module>
+        <module>wyc-driver-boot</module>
         <module>wyc-user-boot</module>
     </modules>
 

@@ -55,10 +55,6 @@
         </dependency>
         <dependency>
             <groupId>com.ga.wyc</groupId>
-            <artifactId>wyc-ex</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.ga.wyc</groupId>
             <artifactId>wyc-redis</artifactId>
         </dependency>
     </dependencies>

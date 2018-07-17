@@ -1,85 +1,30 @@
 package com.ga.wyc.domain.entity;
 
-import java.util.Date;
+import com.ga.wyc.domain.bean.TimeEntity;
+import com.ga.wyc.domain.group.IDriverAutoLoginGroup;
+import com.ga.wyc.domain.group.IDriverLoginGroup;
+import com.ga.wyc.util.MUtil;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 
-public class Driver {
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+
+@EqualsAndHashCode(callSuper = true)
+@Data
+@Accessors(chain = true)
+public class Driver extends TimeEntity {
     private Long id;
 
     private String code;
 
     private String name;
 
+    @Pattern(groups = {IDriverLoginGroup.class,IDriverAutoLoginGroup.class},regexp =MUtil.REGX_PHONE,message = "电话号码格式错误")
     private String phone;
 
     private String gender;
 
     private Integer state;
-
-    private Date createTime;
-
-    private Date updateTime;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code == null ? null : code.trim();
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name == null ? null : name.trim();
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone == null ? null : phone.trim();
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender == null ? null : gender.trim();
-    }
-
-    public Integer getState() {
-        return state;
-    }
-
-    public void setState(Integer state) {
-        this.state = state;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
 }

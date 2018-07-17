@@ -1,7 +1,7 @@
 package com.ga.wyc.domain.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.ga.wyc.domain.bean.BaseEntity;
+
+import com.ga.wyc.domain.bean.TimeEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -9,12 +9,11 @@ import lombok.experimental.Accessors;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.Date;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-public class User extends BaseEntity {
+public class User extends TimeEntity {
     @NotNull(message ="id不能为空")
     private Long id;
     private String code;
@@ -26,9 +25,5 @@ public class User extends BaseEntity {
     @Size(max = 2,message = "性别长度不能大于2")
     private String gender;
     private Integer state;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    private Date createTime;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    private Date updateTime;
 
 }

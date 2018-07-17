@@ -67,11 +67,6 @@
                 <artifactId>wyc-redis</artifactId>
                 <version>1.0</version>
             </dependency>
-            <dependency>
-                <groupId>com.ga.wyc</groupId>
-                <artifactId>wyc-ex</artifactId>
-                <version>1.0</version>
-            </dependency>
         </dependencies>
     </dependencyManagement>
 

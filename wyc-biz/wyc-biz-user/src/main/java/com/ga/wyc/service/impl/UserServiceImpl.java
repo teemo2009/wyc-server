@@ -34,8 +34,8 @@ public class UserServiceImpl implements IUserService {
     @Resource
     CodeUtil codeUtil;
 
-    @Value("${redis.sms}")
-    private String REDIS_SMS;
+    @Value("${redis.smsUser}")
+    private String REDIS_SMS_USER;
 
     @Value("${redis.user}")
     private String REDIS_USER;
@@ -50,7 +50,7 @@ public class UserServiceImpl implements IUserService {
             throw new ValidException("请输入正确的电话号码");
         }
         //判断是否发送了验证码
-        String smsKey = REDIS_SMS + VerifyCode.Type.LOGIN + ":" + phone;
+        String smsKey = REDIS_SMS_USER + VerifyCode.Type.LOGIN + ":" + phone;
         if (!redisUtil.hasKey(smsKey)) {
             throw new BusinessException("验证码失效");
         }
@@ -142,7 +142,7 @@ public class UserServiceImpl implements IUserService {
             throw new ValidException("请输入正确的电话号码");
         }
         //电话号码是否已经发送过电话号码
-        String key = REDIS_SMS + VerifyCode.Type.LOGIN + ":" + phone;
+        String key = REDIS_SMS_USER + VerifyCode.Type.LOGIN + ":" + phone;
         if (redisUtil.hasKey(key)) {
             throw new BusinessException("验证码已发送，90秒内不能重复发送");
         }

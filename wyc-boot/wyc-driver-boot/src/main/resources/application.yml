@@ -1,10 +1,8 @@
-
-
 spring:
   profiles:
     active: dev
   jmx:
-    default-domain: wyc-admin
+    default-domain: wyc-driver
   datasource:
         type: com.alibaba.druid.pool.DruidDataSource
         druid:
@@ -38,8 +36,6 @@ spring:
            min-idle: 0
 
 
-
-
 mybatis:
   mapper-locations: classpath*:mapper/*.xml
 
@@ -53,16 +49,16 @@ pagehelper:
 jwt:
     ###TOKEN有效期 1小时 3600000
     expire: 3600000
-    salt: wyc-admin&%^&
+    salt: wyc-driver&%^&
   #redis键值对配置
 redis:
-     prefix: 'WYC-ADMIN:'
+     prefix: 'WYC-DRIVER:'
      user : '${redis.prefix}USER:'
-     driver : '${redis.prefix}DRIVER:'
+     driver: '${redis.prefix}DRIVER:'
      manager: '${redis.prefix}MANAGER:'
-     smsUser: '${redis.prefix}SMS:USER:'
      smsDriver: '${redis.prefix}SMS:DRIVER:'
+     smsUser: '${redis.prefix}SMS:USER:'
      testCode: 6666
 
 server:
-  port: 8072
+  port: 8073

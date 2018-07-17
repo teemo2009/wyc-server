@@ -20,7 +20,6 @@
         <module>wyc-http</module>
         <module>wyc-util</module>
         <module>wyc-redis</module>
-        <module>wyc-ex</module>
     </modules>
 
 

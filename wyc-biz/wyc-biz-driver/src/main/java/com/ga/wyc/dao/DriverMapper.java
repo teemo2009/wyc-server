@@ -1,6 +1,9 @@
 package com.ga.wyc.dao;
 
+import com.ga.wyc.domain.entity.Car;
 import com.ga.wyc.domain.entity.Driver;
+
+import java.util.List;
 
 public interface DriverMapper {
     int deleteByPrimaryKey(Long id);
@@ -9,7 +12,11 @@ public interface DriverMapper {
 
     int insertSelective(Driver record);
 
+    Driver selectOneSelective(Driver driver);
+
     Driver selectByPrimaryKey(Long id);
+
+    List<Car> getCarsByDriverId(Long driverId);
 
     int updateByPrimaryKeySelective(Driver record);
 
