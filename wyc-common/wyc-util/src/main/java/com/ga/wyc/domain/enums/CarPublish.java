@@ -17,6 +17,6 @@ public enum  CarPublish implements IntEnum<CarPublish> {
 
     @Override
     public int getIntValue() {
-        return 0;
+        return this.value;
     }
 }

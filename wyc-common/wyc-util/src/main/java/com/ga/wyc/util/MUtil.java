@@ -5,6 +5,7 @@ import com.ga.wyc.domain.enums.NetType;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -13,7 +14,7 @@ import java.util.regex.Pattern;
 public class MUtil {
 
     public final static String REGX_PHONE="^[1][3,4,5,6,7,8,9][0-9]{9}$";
-
+    public final static String REGX_XY="^[0-9]{1,10}+(.[0-9]{6})?$";
     /*
    1、移动号段有134,135,136,137, 138,139,147,150,151, 152,157,158,159,178,182,183,184,187,188。
    2、联通号段有130，131，132，155，156，185，186，145，176。
@@ -77,6 +78,19 @@ public class MUtil {
      */
     public boolean isTelphone(String telphone) {
         return isMatchReg(telphone, REGX_PHONE);
+    }
+
+    /**
+     *  是否为规范坐标
+     * */
+    public boolean isLocationXY(BigDecimal ... xy){
+        for(BigDecimal loc:xy){
+           String locStr=loc.toString();
+           if(!isMatchReg(locStr,REGX_XY)){
+               return false;
+           }
+        }
+        return true;
     }
 
     /**

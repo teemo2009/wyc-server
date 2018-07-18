@@ -11,6 +11,8 @@ public interface DriverCarMapper {
 
     DriverCar selectByPrimaryKey(Long id);
 
+    DriverCar selectOneSelective(DriverCar record);
+
     int updateByPrimaryKeySelective(DriverCar record);
 
     int updateByPrimaryKey(DriverCar record);

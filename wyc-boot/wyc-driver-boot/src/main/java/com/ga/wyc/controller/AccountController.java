@@ -1,6 +1,7 @@
 package com.ga.wyc.controller;
 
 import com.ga.wyc.domain.bean.Result;
+import com.ga.wyc.domain.entity.Order;
 import com.ga.wyc.domain.group.IDriverAutoLoginGroup;
 import com.ga.wyc.domain.group.IDriverLoginGroup;
 import com.ga.wyc.domain.vo.DriverLoginVo;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.groups.Default;
+import java.math.BigDecimal;
 
 
 @RestController
@@ -46,6 +48,12 @@ public class AccountController {
     @PostMapping("/sms/login")
     public Result smsLogin(@RequestParam("phone") String phone){
         return  driverService.sendSmsLogin(phone);
+    }
+
+
+    @PostMapping("/test")
+    public Result getOrder(@RequestBody Order order){
+        return Result.success().data(order);
     }
 
 }

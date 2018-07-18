@@ -16,15 +16,10 @@ import javax.validation.constraints.Pattern;
 @Accessors(chain = true)
 public class Driver extends TimeEntity {
     private Long id;
-
     private String code;
-
     private String name;
-
     @Pattern(groups = {IDriverLoginGroup.class,IDriverAutoLoginGroup.class},regexp =MUtil.REGX_PHONE,message = "电话号码格式错误")
     private String phone;
-
     private String gender;
-
     private Integer state;
 }

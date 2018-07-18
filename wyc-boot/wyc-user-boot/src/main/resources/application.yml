@@ -51,8 +51,8 @@ pagehelper:
 
   #JWT配置
 jwt:
-    ###TOKEN有效期 1小时 3600000
-    expire: 3600000
+    ###TOKEN有效期 1小时 3600
+    expire: 3600
     salt: wyc-admin&%^&
   #redis键值对配置
 redis:

@@ -1,6 +1,7 @@
 package com.ga.wyc.service;
 
 import com.ga.wyc.domain.bean.Result;
+import com.ga.wyc.domain.entity.DriverCar;
 import com.ga.wyc.domain.vo.DriverCarAddVo;
 import com.ga.wyc.domain.vo.DriverLoginVo;
 
@@ -26,4 +27,20 @@ public interface IDriverService {
      *  获取司机的车辆列表
      * */
     Result getCars(Long id);
+
+    /**
+     *  发车
+     * */
+    Result startCar(Long driverCarId);
+
+    /**
+     *  收车
+     * */
+    Result stopCar(Long driverCarId);
+
+
+    /**
+     *  刷新坐标
+     * */
+    Result refreshLocation(DriverCar driverCar);
 }

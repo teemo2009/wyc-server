@@ -6,11 +6,14 @@ import com.ga.wyc.dao.DriverCarMapper;
 import com.ga.wyc.dao.DriverDevMapper;
 import com.ga.wyc.dao.DriverMapper;
 import com.ga.wyc.domain.bean.*;
+import com.ga.wyc.domain.dto.DriverCarDTO;
 import com.ga.wyc.domain.dto.DriverDTO;
 import com.ga.wyc.domain.entity.Car;
 import com.ga.wyc.domain.entity.Driver;
 import com.ga.wyc.domain.entity.DriverCar;
 import com.ga.wyc.domain.entity.DriverDev;
+import com.ga.wyc.domain.enums.CarPublish;
+import com.ga.wyc.domain.enums.DriverCarState;
 import com.ga.wyc.domain.enums.NetType;
 import com.ga.wyc.domain.vo.DriverCarAddVo;
 import com.ga.wyc.domain.vo.DriverLoginVo;
@@ -26,6 +29,7 @@ import org.springframework.util.ObjectUtils;
 import javax.annotation.Resource;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -214,8 +218,57 @@ public class DriverServiceImpl implements IDriverService {
 
     @Override
     public Result getCars(Long id) {
-
-        return null;
+        List<DriverCarDTO> driverCarDTO=driverMapper.selectDriverCarsByID(id);
+        return Result.success().data(driverCarDTO);
     }
 
+    @Override
+    public Result startCar(Long driverCarId) {
+        DriverCar driverCar= driverCarMapper.selectByPrimaryKey(driverCarId);
+        Long carId=driverCar.getCarId();
+        Long driverId=driverCar.getDriverId();
+        //检查该车辆是否发车
+        DriverCar isCarPushRecord=new DriverCar().setCarId(carId).setPublish(CarPublish.START);
+        DriverCar isCarPush=driverCarMapper.selectOneSelective(isCarPushRecord);
+        if(!ObjectUtils.isEmpty(isCarPush)){
+            throw new BusinessException("该车辆已经被其它司机发车");
+        }
+        //检查该司机是否用其它车辆发车
+        DriverCar isCarStartRecord=new DriverCar().setDriverId(driverId).setPublish(CarPublish.START);
+        DriverCar isCarStart=driverCarMapper.selectOneSelective(isCarStartRecord);
+        if (!ObjectUtils.isEmpty(isCarStart)) {
+            throw new BusinessException("您已经在发车中，不能再次发车");
+        }
+        DriverCar updateRecord=new DriverCar().setId(driverCarId).setDriverId(driverId).setCarId(carId)
+                .setState(DriverCarState.IDLE).setPublish(CarPublish.START);
+        //发车更新状态
+        driverCarMapper.updateByPrimaryKeySelective(updateRecord);
+        return Result.success().message("发车成功");
+    }
+
+    @Override
+    public Result stopCar(Long driverCarId) {
+        //检查该司机是否在送人过程中
+        DriverCar driverCar= driverCarMapper.selectByPrimaryKey(driverCarId);
+        //订单正在执行中
+        if (driverCar.getState().equals(DriverCarState.RUNNING)){
+            throw new BusinessException("车辆正在派送中，不能收车");
+        }
+        //收车更新状态
+        DriverCar updateRecord=new DriverCar().setId(driverCarId).setPublish(CarPublish.STOP);
+        driverCarMapper.updateByPrimaryKeySelective(updateRecord);
+        return Result.success().message("收车成功");
+    }
+
+
+    @Override
+    public Result refreshLocation(DriverCar driverCar) {
+        Long driverCarId=driverCar.getId();
+        DriverCar db= driverCarMapper.selectByPrimaryKey(driverCarId);
+        if(db.getPublish().equals(CarPublish.STOP)){
+            throw new BusinessException("收车状态，不能更新坐标");
+        }
+        driverCarMapper.updateByPrimaryKeySelective(driverCar);
+        return Result.success().message("更新成功");
+    }
 }

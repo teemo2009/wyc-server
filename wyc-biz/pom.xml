@@ -20,6 +20,7 @@
         <module>wyc-biz-user</module>
         <module>wyc-biz-area</module>
         <module>wyc-biz-driver</module>
+        <module>wyc-biz-order</module>
     </modules>
 
 

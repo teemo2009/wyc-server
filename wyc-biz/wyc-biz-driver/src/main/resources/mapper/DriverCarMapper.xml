@@ -6,9 +6,12 @@
     <result column="driver_id" property="driverId" jdbcType="BIGINT" />
     <result column="car_id" property="carId" jdbcType="BIGINT" />
     <result column="publish" property="publish" jdbcType="INTEGER" typeHandler="com.ga.wyc.typeHandler.IntEnumTypeHandler" />
+    <result column="state" property="state" jdbcType="INTEGER" typeHandler="com.ga.wyc.typeHandler.IntEnumTypeHandler" />
+    <result column="last_lng" property="lastLng" jdbcType="DOUBLE" />
+    <result column="last_lat" property="lastLat" jdbcType="DOUBLE" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, driver_id, car_id, publish
+    id, driver_id,state, car_id, publish,last_lng,last_lat
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -16,15 +19,34 @@
     from t_driver_car
     where id = #{id,jdbcType=BIGINT}
   </select>
+  <select id="selectOneSelective" resultMap="BaseResultMap" parameterType="com.ga.wyc.domain.entity.DriverCar" >
+    select
+    <include refid="Base_Column_List" />
+    from t_driver_car
+    <where>
+      <if test="driverId!=null">
+         AND driver_id=#{driverId,jdbcType=BIGINT}
+      </if>
+      <if test="carId!=null">
+         AND car_id=#{carId,jdbcType=BIGINT}
+      </if>
+      <if test="publish!=null">
+        AND publish=#{publish,jdbcType=INTEGER,typeHandler=com.ga.wyc.typeHandler.IntEnumTypeHandler}
+      </if>
+      <if test="state!=null">
+        AND state=#{state,jdbcType=INTEGER,typeHandler=com.ga.wyc.typeHandler.IntEnumTypeHandler}
+      </if>
+    </where>
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from t_driver_car
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.ga.wyc.domain.entity.DriverCar" >
     insert into t_driver_car (id, driver_id, car_id, 
-      publish)
+      publish,state,last_lng,last_lat)
     values (#{id,jdbcType=BIGINT}, #{driverId,jdbcType=BIGINT}, #{carId,jdbcType=BIGINT}, 
-      #{publish,jdbcType=INTEGER,typeHandler=com.ga.wyc.typeHandler.IntEnumTypeHandler})
+      #{publish,jdbcType=INTEGER,typeHandler=com.ga.wyc.typeHandler.IntEnumTypeHandler},#{state,jdbcType=INTEGER,typeHandler=com.ga.wyc.typeHandler.IntEnumTypeHandler},#{lastLng,jdbcType=DOUBLE},#{lastLat,jdbcType=DOUBLE})
   </insert>
   <insert id="insertSelective" parameterType="com.ga.wyc.domain.entity.DriverCar" >
     insert into t_driver_car
@@ -41,6 +63,15 @@
       <if test="publish != null" >
         publish,
       </if>
+      <if test="state != null" >
+        state,
+      </if>
+      <if test="lastLng != null" >
+        last_lng,
+      </if>
+      <if test="lastLat != null" >
+        last_lat,
+     </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -54,6 +85,15 @@
       </if>
       <if test="publish != null" >
         #{publish,jdbcType=INTEGER,typeHandler=com.ga.wyc.typeHandler.IntEnumTypeHandler},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=INTEGER,typeHandler=com.ga.wyc.typeHandler.IntEnumTypeHandler},
+      </if>
+      <if test="lastLng != null" >
+        #{lastLng,jdbcType=DOUBLE},
+      </if>
+      <if test="lastLat != null" >
+        #{lastLat,jdbcType=DOUBLE},
       </if>
     </trim>
   </insert>
@@ -69,6 +109,15 @@
       <if test="publish != null" >
         publish = #{publish,jdbcType=INTEGER,typeHandler=com.ga.wyc.typeHandler.IntEnumTypeHandler},
       </if>
+      <if test="state != null" >
+        state = #{state,jdbcType=INTEGER,typeHandler=com.ga.wyc.typeHandler.IntEnumTypeHandler},
+      </if>
+      <if test="lastLng != null" >
+        last_lng=#{lastLng,jdbcType=DOUBLE},
+      </if>
+      <if test="lastLat != null" >
+        last_lat=#{lastLat,jdbcType=DOUBLE},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -76,7 +125,8 @@
     update t_driver_car
     set driver_id = #{driverId,jdbcType=BIGINT},
       car_id = #{carId,jdbcType=BIGINT},
-      publish = #{publish,jdbcType=INTEGER,typeHandler=com.ga.wyc.typeHandler.IntEnumTypeHandler}
+      publish = #{publish,jdbcType=INTEGER,typeHandler=com.ga.wyc.typeHandler.IntEnumTypeHandler},
+      state = #{state,jdbcType=INTEGER,typeHandler=com.ga.wyc.typeHandler.IntEnumTypeHandler}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

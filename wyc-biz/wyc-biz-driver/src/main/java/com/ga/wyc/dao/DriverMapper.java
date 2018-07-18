@@ -1,5 +1,6 @@
 package com.ga.wyc.dao;
 
+import com.ga.wyc.domain.dto.DriverCarDTO;
 import com.ga.wyc.domain.entity.Car;
 import com.ga.wyc.domain.entity.Driver;
 
@@ -16,7 +17,7 @@ public interface DriverMapper {
 
     Driver selectByPrimaryKey(Long id);
 
-    List<Car> getCarsByDriverId(Long driverId);
+    List<DriverCarDTO> selectDriverCarsByID(Long driverId);
 
     int updateByPrimaryKeySelective(Driver record);
 

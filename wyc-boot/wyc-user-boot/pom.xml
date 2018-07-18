@@ -58,6 +58,10 @@
             <groupId>com.ga.wyc</groupId>
             <artifactId>wyc-redis</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.ga.wyc</groupId>
+            <artifactId>wyc-biz-order</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

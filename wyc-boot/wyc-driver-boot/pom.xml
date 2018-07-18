@@ -51,6 +51,14 @@
 		</dependency>
 		<dependency>
 			<groupId>com.ga.wyc</groupId>
+			<artifactId>wyc-biz-order</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.ga.wyc</groupId>
+			<artifactId>wyc-biz-user</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.ga.wyc</groupId>
 			<artifactId>wyc-http</artifactId>
 		</dependency>
 		<dependency>

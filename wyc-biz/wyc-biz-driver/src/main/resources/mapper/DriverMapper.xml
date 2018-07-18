@@ -11,6 +11,33 @@
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
   </resultMap>
+  <resultMap id="DriverCarDTOMap" type="com.ga.wyc.domain.dto.DriverCarDTO">
+    <id column="id" property="id" jdbcType="BIGINT"/>
+    <result column="publish" property="publish" jdbcType="INTEGER" typeHandler="com.ga.wyc.typeHandler.IntEnumTypeHandler" />
+    <result column="state" property="state" jdbcType="INTEGER" typeHandler="com.ga.wyc.typeHandler.IntEnumTypeHandler" />
+    <result column="last_lng" property="lastLng" jdbcType="DOUBLE" />
+    <result column="last_lat" property="lastLat" jdbcType="DOUBLE" />
+    <association property="car" javaType="com.ga.wyc.domain.entity.Car">
+      <id column="car_id" property="id" jdbcType="BIGINT" />
+      <result column="car_code" property="code" jdbcType="VARCHAR" />
+      <result column="car_vehicle_no" property="vehicleNo" jdbcType="VARCHAR" />
+      <result column="car_seats" property="seats" jdbcType="INTEGER" />
+      <result column="car_model" property="model" jdbcType="VARCHAR" />
+      <result column="car_vehicle_type" property="vehicleType" jdbcType="VARCHAR" />
+      <result column="car_vehicle_color" property="vehicleColor" jdbcType="VARCHAR" />
+      <result column="car_create_time" property="createTime" jdbcType="TIMESTAMP" />
+      <result column="car_update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    </association>
+    <association property="driver" javaType="com.ga.wyc.domain.entity.Driver">
+      <id column="driver_id" property="id" jdbcType="BIGINT" />
+      <result column="driver_code" property="code" jdbcType="VARCHAR" />
+      <result column="driver_name" property="name" jdbcType="VARCHAR" />
+      <result column="driver_phone" property="phone" jdbcType="VARCHAR" />
+      <result column="driver_gender" property="gender" jdbcType="VARCHAR" />
+      <result column="driver_create_time" property="createTime" jdbcType="TIMESTAMP" />
+      <result column="driver_update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    </association>
+  </resultMap>
   <sql id="Base_Column_List" >
     id, code, name, phone, gender, state, create_time, update_time
   </sql>
@@ -29,6 +56,28 @@
         AND phone=#{phone,jdbcType=VARCHAR}
       </if>
     </where>
+  </select>
+  <select id="selectDriverCarsByID" parameterType="java.lang.Long" resultMap="DriverCarDTOMap">
+    SELECT
+    a.id,
+    a.publish,
+    a.state,
+    a.last_lng,
+    a.last_lat,
+    b.id AS car_id,
+    b.`code` AS car_code,
+    b.vehicle_no AS car_vehicle_no ,
+    b.seats AS car_seats,
+    b.model AS car_model,
+    b.vehicle_type AS car_vehicle_type,
+    b.vehicle_color AS car_vehicle_color,
+    b.create_time AS car_create_time,
+    b.update_time AS car_update_time
+    FROM
+    t_driver_car AS a
+    JOIN t_car AS b ON a.car_id = b.id
+    WHERE
+    a.driver_id = #{id,jdbcType=BIGINT}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from t_driver
