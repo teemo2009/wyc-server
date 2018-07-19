@@ -3,6 +3,7 @@ package com.ga.wyc.service;
 import com.ga.wyc.domain.bean.Result;
 import com.ga.wyc.domain.entity.DriverCar;
 import com.ga.wyc.domain.vo.DriverCarAddVo;
+import com.ga.wyc.domain.vo.DriverCarRefreshVo;
 import com.ga.wyc.domain.vo.DriverLoginVo;
 
 public interface IDriverService {
@@ -29,6 +30,11 @@ public interface IDriverService {
     Result getCars(Long id);
 
     /**
+     *  获取某发车车辆，如果没有就返回空
+     * */
+    Result getPublishCar(Long id);
+
+    /**
      *  发车
      * */
     Result startCar(Long driverCarId);
@@ -42,5 +48,5 @@ public interface IDriverService {
     /**
      *  刷新坐标
      * */
-    Result refreshLocation(DriverCar driverCar);
+    Result refreshLocation(DriverCarRefreshVo driverCar);
 }

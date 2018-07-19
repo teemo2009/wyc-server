@@ -1,21 +1,16 @@
 package com.ga.wyc.service.impl;
 
 import com.ga.wyc.RedisUtil;
-import com.ga.wyc.dao.CarMapper;
-import com.ga.wyc.dao.DriverCarMapper;
-import com.ga.wyc.dao.DriverDevMapper;
-import com.ga.wyc.dao.DriverMapper;
+import com.ga.wyc.dao.*;
 import com.ga.wyc.domain.bean.*;
 import com.ga.wyc.domain.dto.DriverCarDTO;
 import com.ga.wyc.domain.dto.DriverDTO;
-import com.ga.wyc.domain.entity.Car;
-import com.ga.wyc.domain.entity.Driver;
-import com.ga.wyc.domain.entity.DriverCar;
-import com.ga.wyc.domain.entity.DriverDev;
+import com.ga.wyc.domain.entity.*;
 import com.ga.wyc.domain.enums.CarPublish;
 import com.ga.wyc.domain.enums.DriverCarState;
 import com.ga.wyc.domain.enums.NetType;
 import com.ga.wyc.domain.vo.DriverCarAddVo;
+import com.ga.wyc.domain.vo.DriverCarRefreshVo;
 import com.ga.wyc.domain.vo.DriverLoginVo;
 import com.ga.wyc.service.IDriverService;
 import com.ga.wyc.util.CodeUtil;
@@ -27,10 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
 import javax.annotation.Resource;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @Service("driverService")
@@ -51,6 +43,8 @@ public class DriverServiceImpl implements IDriverService {
     DriverCarMapper driverCarMapper;
     @Resource
     DriverDevMapper driverDevMapper;
+    @Resource
+    DriverCarBatchMapper driverCarBatchMapper;
 
     @Value("${redis.driver}")
     private  String  REDIS_DRIVER;
@@ -58,9 +52,15 @@ public class DriverServiceImpl implements IDriverService {
     @Value("${redis.smsDriver}")
     private String REDIS_SMS_DRIVER;
 
+
     @Value("${redis.testCode}")
     private String TEST_CODE;
 
+    @Value("${redis.driverLocation}")
+    private String REDIS_DRIVER_LOCATION;
+
+    @Value("${redis.lastLocation}")
+    private String REDIS_LAST_LOCATION;
 
     @Override
     @Transactional
@@ -223,6 +223,14 @@ public class DriverServiceImpl implements IDriverService {
     }
 
     @Override
+    public Result getPublishCar(Long id) {
+        DriverCar record=new DriverCar().setDriverId(id).setPublish(CarPublish.START);
+        DriverCarDTO driverCarDTO=driverMapper.selectDriverPublishCar(record);
+        return Result.success().data(driverCarDTO);
+    }
+
+    @Override
+    @Transactional
     public Result startCar(Long driverCarId) {
         DriverCar driverCar= driverCarMapper.selectByPrimaryKey(driverCarId);
         Long carId=driverCar.getCarId();
@@ -239,11 +247,18 @@ public class DriverServiceImpl implements IDriverService {
         if (!ObjectUtils.isEmpty(isCarStart)) {
             throw new BusinessException("您已经在发车中，不能再次发车");
         }
-        DriverCar updateRecord=new DriverCar().setId(driverCarId).setDriverId(driverId).setCarId(carId)
-                .setState(DriverCarState.IDLE).setPublish(CarPublish.START);
+        //添加发车的车次，并返回给客户端
+        DriverCarBatch driverCarBatchRecord=new DriverCarBatch();
+        String batchCode=mUtil.UUID();
+        driverCarBatchRecord.setCode(batchCode);
+        driverCarBatchRecord.setDriverCarId(driverCarId);
+        driverCarBatchMapper.insertSelective(driverCarBatchRecord);
         //发车更新状态
+        DriverCar updateRecord=new DriverCar().setId(driverCarId).setDriverId(driverId).setCarId(carId)
+                .setState(DriverCarState.IDLE).setPublish(CarPublish.START)
+                .setDriverCarBatchId(driverCarBatchRecord.getId());
         driverCarMapper.updateByPrimaryKeySelective(updateRecord);
-        return Result.success().message("发车成功");
+        return Result.success().message("发车成功").data(driverCarBatchRecord.getId());
     }
 
     @Override
@@ -262,13 +277,25 @@ public class DriverServiceImpl implements IDriverService {
 
 
     @Override
-    public Result refreshLocation(DriverCar driverCar) {
+    public Result refreshLocation(DriverCarRefreshVo driverCar) {
         Long driverCarId=driverCar.getId();
         DriverCar db= driverCarMapper.selectByPrimaryKey(driverCarId);
         if(db.getPublish().equals(CarPublish.STOP)){
             throw new BusinessException("收车状态，不能更新坐标");
         }
         driverCarMapper.updateByPrimaryKeySelective(driverCar);
+        //更新数据  记录司机从发车到收车的数据  redis_key+司机车ID+收发车次
+       /* String key=REDIS_DRIVER_LOCATION+driverCar.getId()+":"+driverCar.getDriverCarBatchId();
+        List<Location> list;
+        if (!redisUtil.hasKey(key)){
+            list=new ArrayList<>();
+        }else{
+            list=redisUtil.get(key);
+        }
+        list.addAll(driverCar.getLocations());
+        redisUtil.put(key,list);*/
+        String lastKey=REDIS_LAST_LOCATION+driverCar.getId()+":"+driverCar.getDriverCarBatchId();
+        redisUtil.put(lastKey,driverCar.getLocations());
         return Result.success().message("更新成功");
     }
 }

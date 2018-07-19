@@ -1,6 +1,7 @@
 package com.ga.wyc.dao;
 
 import com.ga.wyc.domain.dto.OrderDTO;
+import com.ga.wyc.domain.entity.DriverCar;
 import com.ga.wyc.domain.entity.Order;
 
 import java.util.List;
@@ -24,4 +25,6 @@ public interface OrderMapper {
     Order driverHasOrdering(Long driverCarId);
 
     List<OrderDTO> selectNearOrderList(Map<String,Object> param);
+
+    List<DriverCar> selectNearDriverList(Map<String,Object> param);
 }

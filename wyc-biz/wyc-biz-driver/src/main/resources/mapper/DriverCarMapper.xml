@@ -5,13 +5,14 @@
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="driver_id" property="driverId" jdbcType="BIGINT" />
     <result column="car_id" property="carId" jdbcType="BIGINT" />
+    <result column="driver_car_batch_id" property="driverCarBatchId" jdbcType="BIGINT"/>
     <result column="publish" property="publish" jdbcType="INTEGER" typeHandler="com.ga.wyc.typeHandler.IntEnumTypeHandler" />
     <result column="state" property="state" jdbcType="INTEGER" typeHandler="com.ga.wyc.typeHandler.IntEnumTypeHandler" />
     <result column="last_lng" property="lastLng" jdbcType="DOUBLE" />
     <result column="last_lat" property="lastLat" jdbcType="DOUBLE" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, driver_id,state, car_id, publish,last_lng,last_lat
+    id, driver_id,state, car_id,driver_car_batch_id, publish,last_lng,last_lat
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -105,6 +106,9 @@
       </if>
       <if test="carId != null" >
         car_id = #{carId,jdbcType=BIGINT},
+      </if>
+      <if test="driverCarBatchId!=null">
+        driver_car_batch_id = #{driverCarBatchId,jdbcType=BIGINT},
       </if>
       <if test="publish != null" >
         publish = #{publish,jdbcType=INTEGER,typeHandler=com.ga.wyc.typeHandler.IntEnumTypeHandler},

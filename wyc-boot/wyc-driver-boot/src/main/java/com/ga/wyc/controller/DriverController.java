@@ -3,6 +3,7 @@ package com.ga.wyc.controller;
 import com.ga.wyc.domain.bean.Result;
 import com.ga.wyc.domain.entity.DriverCar;
 import com.ga.wyc.domain.group.IRefreshLocation;
+import com.ga.wyc.domain.vo.DriverCarRefreshVo;
 import com.ga.wyc.service.IDriverService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -21,9 +22,21 @@ public class DriverController {
         return driverService.getInfo(id);
     }
 
+
+    /**
+     *  获取车辆列表
+     * */
     @GetMapping("/car/list/get")
     public Result getCars(@RequestParam("id") Long id){
         return  driverService.getCars(id);
+    }
+
+    /**
+     *  获取司机当前的发车状态
+     * */
+    @GetMapping("/car/publish/get")
+    public Result getPublishCar(@RequestParam("id") Long id){
+        return  driverService.getPublishCar(id);
     }
 
     /**
@@ -47,7 +60,7 @@ public class DriverController {
      *  坐标刷新
      * */
     @PostMapping("/car/refresh")
-    public Result refreshLocation(@RequestBody @Validated({IRefreshLocation.class}) DriverCar driverCar){
+    public Result refreshLocation(@RequestBody @Validated({IRefreshLocation.class}) DriverCarRefreshVo driverCar){
         return driverService.refreshLocation(driverCar);
     }
 }

@@ -48,7 +48,7 @@ pagehelper:
   #JWT配置
 jwt:
     ###TOKEN有效期 1小时 3600
-    expire: 3600
+    expire: 86400
     salt: wyc-driver&%^&
   #redis键值对配置
 redis:
@@ -59,6 +59,10 @@ redis:
      smsDriver: '${redis.prefix}SMS:DRIVER:'
      smsUser: '${redis.prefix}SMS:USER:'
      testCode: 6666
+     orderList: 'WYC-COMMON:ORDERLIST'
+     driverOrder: 'WYC-DRIVER:ORDER:'
+     driverLocation: 'WYC-COMMON:DRIVER_LOCATION:'
+     lastLocation: 'WYC-COMMON:DRIVER_LAST_LOCATION:'
 
 server:
   port: 8073

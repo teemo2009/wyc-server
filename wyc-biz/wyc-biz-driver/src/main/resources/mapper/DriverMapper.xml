@@ -17,6 +17,7 @@
     <result column="state" property="state" jdbcType="INTEGER" typeHandler="com.ga.wyc.typeHandler.IntEnumTypeHandler" />
     <result column="last_lng" property="lastLng" jdbcType="DOUBLE" />
     <result column="last_lat" property="lastLat" jdbcType="DOUBLE" />
+    <result column="driver_car_batch_id" property="driverCarBatchId" jdbcType="BIGINT"/>
     <association property="car" javaType="com.ga.wyc.domain.entity.Car">
       <id column="car_id" property="id" jdbcType="BIGINT" />
       <result column="car_code" property="code" jdbcType="VARCHAR" />
@@ -64,6 +65,9 @@
     a.state,
     a.last_lng,
     a.last_lat,
+    a.publish,
+    a.state,
+    a.driver_car_batch_id,
     b.id AS car_id,
     b.`code` AS car_code,
     b.vehicle_no AS car_vehicle_no ,
@@ -79,6 +83,32 @@
     WHERE
     a.driver_id = #{id,jdbcType=BIGINT}
   </select>
+  <select id="selectDriverPublishCar" parameterType="com.ga.wyc.domain.entity.DriverCar" resultMap="DriverCarDTOMap">
+    SELECT
+  a.id,
+  a.publish,
+  a.state,
+  a.last_lng,
+  a.last_lat,
+  a.publish,
+  a.state,
+    a.driver_car_batch_id,
+  b.id AS car_id,
+  b.`code` AS car_code,
+  b.vehicle_no AS car_vehicle_no ,
+  b.seats AS car_seats,
+  b.model AS car_model,
+  b.vehicle_type AS car_vehicle_type,
+  b.vehicle_color AS car_vehicle_color,
+  b.create_time AS car_create_time,
+  b.update_time AS car_update_time
+  FROM
+  t_driver_car AS a
+  JOIN t_car AS b ON a.car_id = b.id
+  WHERE
+  a.driver_id = #{driverId,jdbcType=BIGINT}
+    AND a.publish=#{publish,jdbcType=INTEGER,typeHandler=com.ga.wyc.typeHandler.IntEnumTypeHandler}
+</select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from t_driver
     where id = #{id,jdbcType=BIGINT}

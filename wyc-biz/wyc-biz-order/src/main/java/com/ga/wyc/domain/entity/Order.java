@@ -31,6 +31,8 @@ public class Order extends TimeEntity {
     @NotNull(groups = {IOrderTackGroup.class},message = "driverCarId不能为空")
     private Long driverCarId;
 
+    private Long driverCarBatchId;
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date departTime;
 

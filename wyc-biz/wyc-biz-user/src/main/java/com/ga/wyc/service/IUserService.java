@@ -18,4 +18,8 @@ public interface IUserService {
       Result updateInfo(User user);
 
       Result getInfo(Long id);
+      /**
+       *  刷新坐标
+       * */
+      Result refreshLocation(Long driverCarId,Long driverCarBatchId);
 }

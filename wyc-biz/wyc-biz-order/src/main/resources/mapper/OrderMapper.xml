@@ -6,6 +6,7 @@
     <result column="code" property="code" jdbcType="VARCHAR" />
     <result column="user_id" property="userId" jdbcType="BIGINT" />
     <result column="driver_car_id" property="driverCarId" jdbcType="BIGINT" />
+    <result column="driver_car_batch_id" property="driverCarBatchId" jdbcType="BIGINT" />
     <result column="depart_time" property="departTime" jdbcType="TIMESTAMP" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
@@ -45,8 +46,17 @@
         <result column="user_gender" property="gender" jdbcType="VARCHAR"/>
       </association>
   </resultMap>
+  <resultMap id="DriverCarMap" type="com.ga.wyc.domain.entity.DriverCar">
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="driver_id" property="driverId" jdbcType="BIGINT" />
+    <result column="car_id" property="carId" jdbcType="BIGINT" />
+    <result column="publish" property="publish" jdbcType="INTEGER" typeHandler="com.ga.wyc.typeHandler.IntEnumTypeHandler" />
+    <result column="state" property="state" jdbcType="INTEGER" typeHandler="com.ga.wyc.typeHandler.IntEnumTypeHandler" />
+    <result column="last_lng" property="lastLng" jdbcType="DOUBLE" />
+    <result column="last_lat" property="lastLat" jdbcType="DOUBLE" />
+  </resultMap>
   <sql id="Base_Column_List" >
-    id, code, user_id, driver_car_id, depart_time, create_time, update_time, passenger_note, 
+    id, code, user_id, driver_car_id,driver_car_batch_id,depart_time, create_time, update_time, passenger_note,
     departure, dep_longitude, dep_latitude, desination, dest_longitude, dest_latitude, 
     encrypt, fareType, state, service_score, evaluate_detail, evaluate_time, dep_time, 
     wait_mile, wait_time, dest_time, drive_mile, drive_time, price, fact_price, far_up_price, 
@@ -63,6 +73,12 @@
     AND dep_latitude&gt;=#{minlat,jdbcType=DECIMAL} AND dep_latitude&lt;=#{maxlat,jdbcType=DECIMAL}
     AND a.state=#{state,jdbcType=INTEGER,typeHandler=com.ga.wyc.typeHandler.IntEnumTypeHandler}
     ORDER BY a.create_time DESC
+  </select>
+  <select id="selectNearDriverList" resultMap="DriverCarMap" parameterType="java.util.Map">
+    SELECT *  FROM t_driver_car WHERE last_lng&gt;=#{minlng,jdbcType=DECIMAL} AND last_lng&lt;=#{maxlng,jdbcType=DECIMAL}
+    AND last_lat&gt;=#{minlat,jdbcType=DECIMAL} AND last_lat&lt;=#{maxlat,jdbcType=DECIMAL}
+    AND publish=#{publish,jdbcType=INTEGER,typeHandler=com.ga.wyc.typeHandler.IntEnumTypeHandler}
+    AND state=#{state,jdbcType=INTEGER,typeHandler=com.ga.wyc.typeHandler.IntEnumTypeHandler}
   </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -126,6 +142,9 @@
       </if>
       <if test="driverCarId != null" >
         driver_car_id,
+      </if>
+      <if test="driverCarBatchId != null" >
+        driver_car_batch_id,
       </if>
       <if test="departTime != null" >
         depart_time,
@@ -231,6 +250,9 @@
       <if test="driverCarId != null" >
         #{driverCarId,jdbcType=BIGINT},
       </if>
+      <if test="driverCarBatchId != null" >
+        #{driverCarBatchId,jdbcType=BIGINT},
+      </if>
       <if test="departTime != null" >
         #{departTime,jdbcType=TIMESTAMP},
       </if>
@@ -334,6 +356,9 @@
       </if>
       <if test="driverCarId != null" >
         driver_car_id = #{driverCarId,jdbcType=BIGINT},
+      </if>
+      <if test="driverCarBatchId != null" >
+        driver_car_batch_id=#{driverCarBatchId,jdbcType=BIGINT},
       </if>
       <if test="departTime != null" >
         depart_time = #{departTime,jdbcType=TIMESTAMP},

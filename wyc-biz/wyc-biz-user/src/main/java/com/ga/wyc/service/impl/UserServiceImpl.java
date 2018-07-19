@@ -17,6 +17,7 @@ import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -42,6 +43,9 @@ public class UserServiceImpl implements IUserService {
 
     @Value("${redis.testCode}")
     private String TEST_CODE;
+
+    @Value("${redis.lastLocation}")
+    private String REDIS_LAST_LOCATION;
 
     @Override
     public Result login(String phone, String code) {
@@ -160,5 +164,12 @@ public class UserServiceImpl implements IUserService {
     public Result getInfo(Long id) {
         User user= userMapper.selectByPrimaryKey(id);
         return Result.success().data(user);
+    }
+
+    @Override
+    public Result refreshLocation(Long driverCarId, Long driverCarBatchId) {
+        String lastKey=REDIS_LAST_LOCATION+driverCarId+":"+driverCarBatchId;
+        List<Location> locations= redisUtil.get(lastKey);
+        return Result.success().data(locations);
     }
 }

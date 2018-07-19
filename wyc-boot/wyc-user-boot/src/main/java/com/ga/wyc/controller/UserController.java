@@ -35,6 +35,10 @@ public class UserController {
     }
 
 
+    @GetMapping("/location/get")
+    public Result refreshLocation(@RequestParam("driverCarId") Long driverCarId,@RequestParam("driverCarBatchId") Long driverCarBatchId){
+        return userService.refreshLocation(driverCarId,driverCarBatchId);
+    }
 
 
 

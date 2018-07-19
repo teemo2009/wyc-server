@@ -1,9 +1,11 @@
 package com.ga.wyc.service;
 
 import com.ga.wyc.domain.bean.Result;
+import com.ga.wyc.domain.entity.DriverCar;
 import com.ga.wyc.domain.entity.Order;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public interface IOrderSerive {
         /**
@@ -15,6 +17,17 @@ public interface IOrderSerive {
          *  司机接单
          * */
         Result   tackOrder(Order order);
+
+        /**
+         *  获取推送的订单
+         * */
+        Result getPublishOrder(Long driverCarId);
+
+
+        /**
+         *  取消推送的订单
+         * */
+        Result  cancelPublishOrder(Long driverCarId);
 
         /**
          *  接到乘客
@@ -50,4 +63,9 @@ public interface IOrderSerive {
          *  司机端获取所有未接单的
          * */
         Result getOrderList(Double lng,Double lat);
+
+        /**
+         *  根据订单查询范围内的司机---发车状态
+         * */
+        List<DriverCar> getDriverByOrderLngLat(Double lng, Double lat);
 }

@@ -18,6 +18,8 @@ public class DriverCar extends BaseEntity {
     private Long id;
     private Long driverId;
     private Long carId;
+    @NotNull(groups = {IRefreshLocation.class},message = "车辆批次ID不能为空")
+    private Long driverCarBatchId;
     private CarPublish publish;
     private DriverCarState state;
     @NotNull(groups = {IRefreshLocation.class},message = "经度不能为空")
