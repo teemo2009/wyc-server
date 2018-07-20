@@ -19,15 +19,9 @@ public interface IOrderSerive {
         Result   tackOrder(Order order);
 
         /**
-         *  获取推送的订单
-         * */
-        Result getPublishOrder(Long driverCarId);
-
-
-        /**
          *  取消推送的订单
          * */
-        Result  cancelPublishOrder(Long driverCarId);
+        Result  driverCancelOrderInit(Long driverCarId);
 
         /**
          *  接到乘客
@@ -35,14 +29,18 @@ public interface IOrderSerive {
         Result startOrder(Order order);
 
         /**
-         *  到达目的地，乘客支付完成
+         *  到达目的地，司机关单
          * */
         Result reachOrder(Order order);
 
         /**
-         *  司机关单
+         *  支付回调，订单完成
          * */
         Result finishOrder(Order order);
+        /**
+         *  计算价格
+         * */
+        Result computedPrice(BigDecimal mile,Integer time);
 
         /**
          *  客户发单，没有司机接收，取消
@@ -60,9 +58,19 @@ public interface IOrderSerive {
         Result customCancel(Order order);
 
         /**
-         *  司机端获取所有未接单的
+         *  司机端获取所有未接单的 暂不使用
          * */
         Result getOrderList(Double lng,Double lat);
+
+        /**
+         *  刷取 司机端 的 接单
+         * **/
+        Result refreshDriverOrder(Long driverCarId,Long driverCarBatchId);
+
+        /**
+         *  刷取 客户端 的 订单,判断是否有司机接单
+         */
+        Result refreshUserOrder(Long id);
 
         /**
          *  根据订单查询范围内的司机---发车状态

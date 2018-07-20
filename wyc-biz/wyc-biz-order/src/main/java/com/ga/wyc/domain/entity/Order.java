@@ -5,9 +5,8 @@ import com.ga.wyc.domain.bean.TimeEntity;
 import com.ga.wyc.domain.enums.Encrypt;
 import com.ga.wyc.domain.enums.OrderState;
 import com.ga.wyc.domain.enums.PayState;
-import com.ga.wyc.domain.group.IOrderInitGroup;
+import com.ga.wyc.domain.group.*;
 
-import com.ga.wyc.domain.group.IOrderTackGroup;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -20,7 +19,8 @@ import java.util.Date;
 @Data
 @Accessors(chain = true)
 public class Order extends TimeEntity {
-    @NotNull(groups = {IOrderTackGroup.class},message = "订单id不能为空")
+    @NotNull(groups = {IOrderTackGroup.class,IOrderStartGroup.class,
+            IOrderReachGroup.class,IOrderFinishGroup.class},message = "订单id不能为空")
     private Long id;
 
     private String code;
@@ -28,7 +28,7 @@ public class Order extends TimeEntity {
     @NotNull(groups = {IOrderInitGroup.class},message = "userId不能为空")
     private Long userId;
 
-    @NotNull(groups = {IOrderTackGroup.class},message = "driverCarId不能为空")
+    @NotNull(groups = {IOrderTackGroup.class,IOrderStartGroup.class,IOrderReachGroup.class},message = "driverCarId不能为空")
     private Long driverCarId;
 
     private Long driverCarBatchId;
@@ -69,15 +69,18 @@ public class Order extends TimeEntity {
     private String evaluateDetail;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date evaluateTime;
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date depTime;
 
+    @NotNull(groups = {IOrderStartGroup.class},message = "空载里程不能为空")
     private BigDecimal waitMile;
-
+    @NotNull(groups = {IOrderStartGroup.class},message = "空载时间不能为空")
     private Integer waitTime;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date destTime;
 
+    @NotNull(groups = {IOrderReachGroup.class},message = "载客里程不能为空")
     private BigDecimal driveMile;
 
     private Integer driveTime;

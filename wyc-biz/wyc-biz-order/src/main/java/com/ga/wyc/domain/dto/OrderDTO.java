@@ -1,5 +1,6 @@
 package com.ga.wyc.domain.dto;
 
+import com.ga.wyc.domain.entity.Car;
 import com.ga.wyc.domain.entity.Driver;
 import com.ga.wyc.domain.entity.Order;
 import com.ga.wyc.domain.entity.User;
@@ -14,4 +15,5 @@ import lombok.experimental.Accessors;
 public class OrderDTO extends Order {
     private User user;
     private Driver driver;
+    private Car car;
 }

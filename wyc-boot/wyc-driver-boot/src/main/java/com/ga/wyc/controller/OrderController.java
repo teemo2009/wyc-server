@@ -3,6 +3,8 @@ package com.ga.wyc.controller;
 import com.ga.wyc.domain.bean.Result;
 import com.ga.wyc.domain.bean.ValidException;
 import com.ga.wyc.domain.entity.Order;
+import com.ga.wyc.domain.group.IOrderReachGroup;
+import com.ga.wyc.domain.group.IOrderStartGroup;
 import com.ga.wyc.domain.group.IOrderTackGroup;
 import com.ga.wyc.service.IOrderSerive;
 import com.ga.wyc.util.MUtil;
@@ -24,6 +26,36 @@ public class OrderController {
     IOrderSerive orderSerive;
 
 
+    /**
+     *  计算价格
+     * */
+    @PostMapping("/compute/price")
+    public Result computePrice(BigDecimal mile,Integer time){
+        return orderSerive.computedPrice(mile,time);
+    }
+
+
+    /**
+     *   司机 刷新订单
+     * */
+    @GetMapping("/driver/refresh")
+    public Result refreshDriverOrder(@RequestParam("driverCarId") Long driverCarId,
+                                     @RequestParam("driverCarBatchId") Long driverCarBatchId){
+        return orderSerive.refreshDriverOrder(driverCarId,driverCarBatchId);
+    }
+
+
+
+
+
+    /**
+     *  司机  取消推送的订单
+     * */
+    @PostMapping("/init/driver/cancel")
+    public Result cancelOrderInit(@RequestParam("driverCarId") Long driverCarId){
+        return  orderSerive.driverCancelOrderInit(driverCarId);
+    }
+
 
 
     /**
@@ -33,6 +65,25 @@ public class OrderController {
     public Result orderTack(@RequestBody @Validated({IOrderTackGroup.class}) Order order, BindingResult bindingResult){
         mUtil.checkParam(bindingResult);
         return  orderSerive.tackOrder(order);
+    }
+
+
+    /**
+     *  确认接客
+     * */
+    @PostMapping("/start")
+    public Result orderStart(@RequestBody @Validated({IOrderStartGroup.class}) Order order, BindingResult bindingResult){
+        mUtil.checkParam(bindingResult);
+        return  orderSerive.startOrder(order);
+    }
+
+    /**
+     *  乘客下车司机端确认
+     * */
+    @PostMapping("/reach")
+    public Result orderReach(@RequestBody @Validated({IOrderReachGroup.class}) Order order, BindingResult bindingResult){
+        mUtil.checkParam(bindingResult);
+        return  orderSerive.reachOrder(order);
     }
 
 
