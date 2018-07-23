@@ -40,6 +40,9 @@ public class OrderTask {
     @Value("${redis.driverOrder}")
     String REDIS_DRIVER_ORDER;
 
+    @Value("${redis.orderPush}")
+    String REDIS_ORDER_PUSH;
+
     @Resource
     IOrderSerive orderSerive;
 
@@ -81,10 +84,12 @@ public class OrderTask {
                             Order tracOrderRecord=new Order();
                             tracOrderRecord.setId(currOrder.getId()).setDriverCarId(chooseDriverCar.getId());
                             String keyDriver=REDIS_DRIVER_ORDER+chooseDriverCar.getId();
+                            String keyPush=REDIS_ORDER_PUSH+currOrder.getId();
                             if (!redisUtil.hasKey(keyDriver)){
                                 //判断司机是否在有订单，没有就分配
                                 // 订单在取消的时候删除该键值对和结束或正常取消情况下
                                 redisUtil.put(keyDriver,tracOrderRecord);
+                                redisUtil.put(keyPush,chooseDriverCar.getId());
                                 //标记这些ID
                                 finishOrderIds.add(currOrder.getId());
                                 log.info("{}订单已分配给了{}",currOrder.getId(),chooseDriverCar.getId());

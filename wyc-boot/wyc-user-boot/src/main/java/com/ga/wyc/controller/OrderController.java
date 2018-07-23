@@ -3,6 +3,7 @@ package com.ga.wyc.controller;
 import com.ga.wyc.domain.bean.Result;
 import com.ga.wyc.domain.bean.ValidException;
 import com.ga.wyc.domain.entity.Order;
+import com.ga.wyc.domain.group.IOrderCustomCancelGroup;
 import com.ga.wyc.domain.group.IOrderFinishGroup;
 import com.ga.wyc.domain.group.IOrderInitGroup;
 import com.ga.wyc.domain.group.IOrderTackGroup;
@@ -53,6 +54,14 @@ public class OrderController {
     @GetMapping("/user/refresh")
     public Result refreshUserOrder(@RequestParam("id") Long id){
         return orderSerive.refreshUserOrder(id);
+    }
+
+    /**
+     *  客户端 取消订单
+     * */
+    @PostMapping("/cancel")
+    public Result  cancel(@RequestBody @Validated({IOrderCustomCancelGroup.class}) Order order){
+        return orderSerive.customeCancel(order);
     }
 
 

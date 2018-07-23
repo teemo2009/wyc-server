@@ -43,6 +43,9 @@ public class OrderServiceImpl implements IOrderSerive {
     @Value("${redis.driverOrder}")
     String REDIS_DRIVER_ORDER;
 
+    @Value("${redis.orderPush}")
+    String REDIS_ORDER_PUSH;
+
 
     @Override
     public synchronized Result initOrder(Order order) {
@@ -182,7 +185,7 @@ public class OrderServiceImpl implements IOrderSerive {
         //5.far_up_price 远途加价金额（服务端计算）
         //6.other_up_price 其它加价金额（暂时不考虑）
         Order updateRecord=new Order().setId(order.getId()).setDestTime(nowTime)
-                .setDriveTime(driveTime).setFactPrice(factPrice).setFarUpPrice(farUpPrice);
+                .setDriveTime(driveTime).setFactPrice(factPrice).setFarUpPrice(farUpPrice).setState(OrderState.REACH);
         orderMapper.updateByPrimaryKeySelective(updateRecord);
         return Result.success().message("操作成功").data(updateRecord);
     }
@@ -195,9 +198,9 @@ public class OrderServiceImpl implements IOrderSerive {
         if (ObjectUtils.isEmpty(db)) {
             throw new BusinessException("订单不存在");
         }
-        //判断是否为当前司机所接的订单
-        if (order.getDriverCarId() != db.getDriverCarId()) {
-            throw new BusinessException("您不是当前接单司机，无权操作");
+        //判断是否为当前用户的订单
+        if (order.getUserId() != db.getUserId()) {
+            throw new BusinessException("您不是当前用户，无权操作");
         }
         //判断订单状态是否为可支付状态
         if (!db.getState().equals(OrderState.REACH)) {
@@ -231,8 +234,9 @@ public class OrderServiceImpl implements IOrderSerive {
 
 
     @Override
-    public Result initCancel(Order order) {
-        //乘客下车
+    @Transactional
+    public Result customeCancel(Order order) {
+        //乘客取消
         //判断订单是否存在
         Order db = orderMapper.selectByPrimaryKey(order.getId());
         if (ObjectUtils.isEmpty(db)) {
@@ -243,23 +247,72 @@ public class OrderServiceImpl implements IOrderSerive {
             throw new BusinessException("你不是订单发起乘客，无权操作");
         }
         //判断是否为可以取消
-        if(!order.getState().equals(OrderState.INIT)){
+        if(!db.getState().equals(OrderState.INIT) &&
+                !db.getState().equals(OrderState.TAKING)){
             throw new BusinessException("当前订单状态异常，无法操作");
         }
-        Order updateRecord=new Order().setId(order.getId()).setState(OrderState.FINISH);
-        orderMapper.updateByPrimaryKeySelective(updateRecord);
+        Order updateRecord;
+        if(ObjectUtils.isEmpty(db.getDriverCarId())){
+
+            //没有司机接单
+            //从队列中删除订单
+            String key = REDIS_ORDER_LIST;
+            if (!redisUtil.hasKey(key)) {
+               List<Order> orders = new ArrayList<>();
+               int currIndex=0;
+               for (int i=0;i<orders.size();i++){
+                   if(orders.get(i).getId()==db.getId()){
+                       currIndex=i;
+                   }
+               }
+               if(currIndex>0){
+                   orders.remove(currIndex);
+                   redisUtil.put(key,orders);
+               }
+            }
+
+            updateRecord=new Order().setId(db.getId()).setState(OrderState.INIT_CANCEL);
+            orderMapper.updateByPrimaryKeySelective(updateRecord);
+            //redis删除出对应的司机
+            String keyPush=REDIS_ORDER_PUSH+db.getId();
+            if (redisUtil.hasKey(keyPush)){
+                Long cacheDriverCarId=Long.parseLong(redisUtil.get(keyPush)+"");
+                String keyDriver=REDIS_DRIVER_ORDER+cacheDriverCarId;
+                redisUtil.remove(keyDriver);
+            }
+        }else{
+            //司机接单
+            updateRecord=new Order().setId(db.getId()).setState(OrderState.CUSTOME_CANCEL);
+            orderMapper.updateByPrimaryKeySelective(updateRecord);
+            //修改司机的状态，回到初始化
+            initDriverCar(db.getDriverCarId());
+        }
         return Result.success().message("操作成功");
     }
 
     @Override
     public Result driverCancel(Order order) {
-        return null;
+        //司机取消
+        //判断订单是否存在
+        Order db = orderMapper.selectByPrimaryKey(order.getId());
+        if (ObjectUtils.isEmpty(db)) {
+            throw new BusinessException("订单不存在");
+        }
+        //判断是否为当前司机
+        if(!db.getDriverCarId().equals(order.getDriverCarId())){
+            throw new BusinessException("你不是当前司机，无权操作");
+        }
+        //判断是否为可以取消
+        if(!db.getState().equals(OrderState.TAKING)){
+            throw new BusinessException("当前订单状态异常，无法操作");
+        }
+        Order updateRecord=new Order().setId(db.getId()).setState(OrderState.DRIVER_CANCEL);
+        orderMapper.updateByPrimaryKeySelective(updateRecord);
+        //修改司机的状态，回到初始化
+        initDriverCar(db.getDriverCarId());
+        return Result.success().message("操作成功");
     }
 
-    @Override
-    public Result customCancel(Order order) {
-        return null;
-    }
 
     @Override
     public Result getOrderList(Double longitude, Double latitude) {

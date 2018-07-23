@@ -20,15 +20,15 @@ import java.util.Date;
 @Accessors(chain = true)
 public class Order extends TimeEntity {
     @NotNull(groups = {IOrderTackGroup.class,IOrderStartGroup.class,
-            IOrderReachGroup.class,IOrderFinishGroup.class},message = "订单id不能为空")
+            IOrderReachGroup.class,IOrderFinishGroup.class,IOrderCustomCancelGroup.class,IOrderDriverCancelGroup.class},message = "订单id不能为空")
     private Long id;
 
     private String code;
 
-    @NotNull(groups = {IOrderInitGroup.class},message = "userId不能为空")
+    @NotNull(groups = {IOrderInitGroup.class,IOrderFinishGroup.class,IOrderCustomCancelGroup.class},message = "userId不能为空")
     private Long userId;
 
-    @NotNull(groups = {IOrderTackGroup.class,IOrderStartGroup.class,IOrderReachGroup.class},message = "driverCarId不能为空")
+    @NotNull(groups = {IOrderTackGroup.class,IOrderStartGroup.class,IOrderReachGroup.class,IOrderDriverCancelGroup.class},message = "driverCarId不能为空")
     private Long driverCarId;
 
     private Long driverCarBatchId;

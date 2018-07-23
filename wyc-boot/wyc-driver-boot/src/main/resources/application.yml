@@ -60,9 +60,11 @@ redis:
      smsUser: '${redis.prefix}SMS:USER:'
      testCode: 6666
      orderList: 'WYC-COMMON:ORDERLIST'
-     driverOrder: 'WYC-DRIVER:ORDER:'
+     orderPush: 'WYC-COMMON:ORDERPUSH:'
      driverLocation: 'WYC-COMMON:DRIVER_LOCATION:'
      lastLocation: 'WYC-COMMON:DRIVER_LAST_LOCATION:'
+     driverOrder: 'WYC-DRIVER:ORDER:'
+
 
 server:
   port: 8073

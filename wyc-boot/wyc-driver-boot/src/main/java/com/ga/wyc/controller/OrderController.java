@@ -3,9 +3,7 @@ package com.ga.wyc.controller;
 import com.ga.wyc.domain.bean.Result;
 import com.ga.wyc.domain.bean.ValidException;
 import com.ga.wyc.domain.entity.Order;
-import com.ga.wyc.domain.group.IOrderReachGroup;
-import com.ga.wyc.domain.group.IOrderStartGroup;
-import com.ga.wyc.domain.group.IOrderTackGroup;
+import com.ga.wyc.domain.group.*;
 import com.ga.wyc.service.IOrderSerive;
 import com.ga.wyc.util.MUtil;
 import org.springframework.validation.BindingResult;
@@ -84,6 +82,15 @@ public class OrderController {
     public Result orderReach(@RequestBody @Validated({IOrderReachGroup.class}) Order order, BindingResult bindingResult){
         mUtil.checkParam(bindingResult);
         return  orderSerive.reachOrder(order);
+    }
+
+
+    /**
+     *  司机端 取消订单
+     * */
+    @PostMapping("/cancel")
+    public Result  cancel(@RequestBody @Validated({IOrderDriverCancelGroup.class}) Order order){
+        return orderSerive.driverCancel(order);
     }
 
 

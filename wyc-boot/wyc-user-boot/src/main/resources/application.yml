@@ -64,6 +64,7 @@ redis:
      smsDriver: '${redis.prefix}SMS:DRIVER:'
      testCode: 6666
      orderList: 'WYC-COMMON:ORDERLIST'
+     orderPush: 'WYC-COMMON:ORDERPUSH:'
      driverOrder: 'WYC-DRIVER:ORDER:'
      driverLocation: 'WYC-COMMON:DRIVER_LOCATION:'
      lastLocation: 'WYC-COMMON:DRIVER_LAST_LOCATION:'

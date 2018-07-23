@@ -272,6 +272,10 @@ public class DriverServiceImpl implements IDriverService {
         //收车更新状态
         DriverCar updateRecord=new DriverCar().setId(driverCarId).setPublish(CarPublish.STOP);
         driverCarMapper.updateByPrimaryKeySelective(updateRecord);
+        //更新车次完成时间
+        DriverCarBatch driverCarBatch=new DriverCarBatch()
+                .setId(driverCar.getDriverCarBatchId()).setFinishTime(new Date());
+        driverCarBatchMapper.updateByPrimaryKeySelective(driverCarBatch);
         return Result.success().message("收车成功");
     }
 
@@ -284,16 +288,6 @@ public class DriverServiceImpl implements IDriverService {
             throw new BusinessException("收车状态，不能更新坐标");
         }
         driverCarMapper.updateByPrimaryKeySelective(driverCar);
-        //更新数据  记录司机从发车到收车的数据  redis_key+司机车ID+收发车次
-       /* String key=REDIS_DRIVER_LOCATION+driverCar.getId()+":"+driverCar.getDriverCarBatchId();
-        List<Location> list;
-        if (!redisUtil.hasKey(key)){
-            list=new ArrayList<>();
-        }else{
-            list=redisUtil.get(key);
-        }
-        list.addAll(driverCar.getLocations());
-        redisUtil.put(key,list);*/
         String lastKey=REDIS_LAST_LOCATION+driverCar.getId()+":"+driverCar.getDriverCarBatchId();
         redisUtil.put(lastKey,driverCar.getLocations());
         return Result.success().message("更新成功");
