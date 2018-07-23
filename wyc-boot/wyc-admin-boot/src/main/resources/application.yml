@@ -58,9 +58,16 @@ jwt:
 redis:
      prefix: 'WYC-ADMIN:'
      user : '${redis.prefix}USER:'
+     driver: '${redis.prefix}DRIVER:'
      manager: '${redis.prefix}MANAGER:'
-     sms: '${redis.prefix}SMS:'
+     smsDriver: '${redis.prefix}SMS:DRIVER:'
+     smsUser: '${redis.prefix}SMS:USER:'
      testCode: 6666
+     orderList: 'WYC-COMMON:ORDERLIST'
+     orderPush: 'WYC-COMMON:ORDERPUSH:'
+     driverLocation: 'WYC-COMMON:DRIVER_LOCATION:'
+     lastLocation: 'WYC-COMMON:DRIVER_LAST_LOCATION:'
+     driverOrder: 'WYC-DRIVER:ORDER:'
 
 server:
   port: 8071
