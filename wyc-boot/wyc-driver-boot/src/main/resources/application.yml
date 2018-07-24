@@ -52,18 +52,21 @@ jwt:
     salt: wyc-driver&%^&
   #redis键值对配置
 redis:
-     prefix: 'WYC-DRIVER:'
-     user : '${redis.prefix}USER:'
-     driver: '${redis.prefix}DRIVER:'
-     manager: '${redis.prefix}MANAGER:'
-     smsDriver: '${redis.prefix}SMS:DRIVER:'
-     smsUser: '${redis.prefix}SMS:USER:'
+     adminPre: 'WYC-ADMIN:'
+     userPre: 'WYC-USER:'
+     driverPre: 'WYC-DRIVER:'
+     commonPre: 'WYC-COMMON:'
+     user : '${redis.userPre}USER:'
+     driver: '${redis.driverPre}DRIVER:'
+     manager: '${redis.adminPre}MANAGER:'
+     smsDriver: '${redis.driverPre}SMS:DRIVER:'
+     smsUser: '${redis.userPre}SMS:USER:'
      testCode: 6666
-     orderList: 'WYC-COMMON:ORDERLIST'
-     orderPush: 'WYC-COMMON:ORDERPUSH:'
-     driverLocation: 'WYC-COMMON:DRIVER_LOCATION:'
-     lastLocation: 'WYC-COMMON:DRIVER_LAST_LOCATION:'
-     driverOrder: 'WYC-DRIVER:ORDER:'
+     orderList: '${redis.commonPre}ORDERLIST'
+     orderPush: '${redis.commonPre}ORDERPUSH:'
+     driverLocation: '${redis.commonPre}DRIVER_LOCATION:'
+     lastLocation: '${redis.commonPre}DRIVER_LAST_LOCATION:'
+     driverOrder: '${redis.driverPre}ORDER:'
 
 
 server:

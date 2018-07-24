@@ -22,12 +22,12 @@ public class RedisUtil {
     @Autowired
     protected RedisTemplate redisTemplate;
 
-    @Value("${redis.prefix}")
+  /*  @Value("${redis.prefix}")
     protected String prefix;
 
     public String perfixFomatter(String key) {
         return this.prefix + key;
-    }
+    }*/
 
     /**
      * 添加

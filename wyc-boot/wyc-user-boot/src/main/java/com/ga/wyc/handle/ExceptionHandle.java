@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 @ControllerAdvice
 @RestController
 @Slf4j
@@ -48,8 +51,23 @@ public class ExceptionHandle extends ResponseEntityExceptionHandler  {
             return Result.custom().code(tokenLoseException.getCode())
                     .message(tokenLoseException.getMessage());
         }
-        log.error("class:{},detail:{}",e.getClass().getName(),e.getMessage());
-        return Result.unkonw().message(e.getMessage());
+        String msg=getExceptionToString(e);
+        log.error("class:{},detail:{}",e.getClass().getName(),msg);
+        return Result.unkonw().message(msg);
     }
+
+
+    /**
+     * 将 Exception 转化为 String
+     */
+    private String getExceptionToString(Throwable e) {
+        if (e == null){
+            return "";
+        }
+        StringWriter stringWriter = new StringWriter();
+        e.printStackTrace(new PrintWriter(stringWriter));
+        return stringWriter.toString();
+    }
+
 
 }

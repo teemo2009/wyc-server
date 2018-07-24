@@ -39,6 +39,29 @@
       </if>
     </where>
   </select>
+  <select id="selectNearDriverList" resultMap="BaseResultMap" parameterType="java.util.Map">
+    SELECT * FROM t_driver_car
+    <where>
+      <if test="minlng!=null">
+        AND last_lng&gt;=#{minlng,jdbcType=DECIMAL}
+      </if>
+      <if test="maxlng!=null">
+        AND last_lng&lt;=#{maxlng,jdbcType=DECIMAL}
+      </if>
+      <if test="minlat!=null">
+        AND last_lat&gt;=#{minlat,jdbcType=DECIMAL}
+      </if>
+      <if test="maxlat!=null">
+        AND last_lat&lt;=#{maxlat,jdbcType=DECIMAL}
+      </if>
+      <if test="state!=null">
+        AND state=#{state,jdbcType=INTEGER,typeHandler=com.ga.wyc.typeHandler.IntEnumTypeHandler}
+      </if>
+      <if test="publish!=null">
+        AND publish=#{publish,jdbcType=INTEGER,typeHandler=com.ga.wyc.typeHandler.IntEnumTypeHandler}
+      </if>
+    </where>
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from t_driver_car
     where id = #{id,jdbcType=BIGINT}

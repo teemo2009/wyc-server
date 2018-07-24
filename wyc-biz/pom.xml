@@ -21,6 +21,7 @@
         <module>wyc-biz-area</module>
         <module>wyc-biz-driver</module>
         <module>wyc-biz-order</module>
+        <module>wyc-biz-manager</module>
     </modules>
 
 

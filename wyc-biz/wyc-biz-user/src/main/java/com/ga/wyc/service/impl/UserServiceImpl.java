@@ -16,6 +16,7 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -172,4 +173,6 @@ public class UserServiceImpl implements IUserService {
         List<Location> locations= redisUtil.get(lastKey);
         return Result.success().data(locations);
     }
+
+
 }

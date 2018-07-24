@@ -59,6 +59,11 @@
             </dependency>
             <dependency>
                 <groupId>com.ga.wyc</groupId>
+                <artifactId>wyc-biz-manager</artifactId>
+                <version>1.0</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ga.wyc</groupId>
                 <artifactId>wyc-util</artifactId>
                 <version>1.0</version>
             </dependency>

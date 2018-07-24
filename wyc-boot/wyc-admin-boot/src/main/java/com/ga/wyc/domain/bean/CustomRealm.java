@@ -2,6 +2,7 @@ package com.ga.wyc.domain.bean;
 
 import com.ga.wyc.RedisUtil;
 import com.ga.wyc.config.BaseCustomRealm;
+import com.ga.wyc.domain.dto.ManagerDTO;
 import com.ga.wyc.util.JWTUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.*;
@@ -44,11 +45,11 @@ public class CustomRealm extends BaseCustomRealm {
         //判断缓存中是否有登陆信息
         if (redisUtil.hasKey(key)) {
             //判断token是否一致
-           /* AccountDTO accountDTO = redisUtil.get(key);
-            if (!accountDTO.getToken().equals(clientDigest)) {
+            ManagerDTO managerDTO = redisUtil.get(key);
+            if (!managerDTO.getToken().equals(clientDigest)) {
                 log.info("异地登录");
                 throw new DisabledAccountException();
-            }*/
+            }
             return new SimpleAuthenticationInfo("", clientDigest, this.getName());
         } else {
             //没有登录

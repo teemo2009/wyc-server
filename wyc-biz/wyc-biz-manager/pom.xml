@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>wyc-biz</artifactId>
+        <groupId>com.ga.wyc</groupId>
+        <version>1.0</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <name>wyc-biz-manager</name>
+    <groupId>com.ga.wyc</groupId>
+    <artifactId>wyc-biz-manager</artifactId>
+    <version>1.0</version>
+
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.ga.wyc</groupId>
+            <artifactId>wyc-db</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.ga.wyc</groupId>
+            <artifactId>wyc-util</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.ga.wyc</groupId>
+            <artifactId>wyc-redis</artifactId>
+        </dependency>
+    </dependencies>
+
+</project>

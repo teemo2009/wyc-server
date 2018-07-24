@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -291,5 +292,44 @@ public class DriverServiceImpl implements IDriverService {
         String lastKey=REDIS_LAST_LOCATION+driverCar.getId()+":"+driverCar.getDriverCarBatchId();
         redisUtil.put(lastKey,driverCar.getLocations());
         return Result.success().message("更新成功");
+    }
+
+    @Override
+    public Result getNearDriverLocations(BigDecimal lng, BigDecimal lat) {
+        Map<String,Object> paramMap=getRangeMap(lng.doubleValue(),lat.doubleValue());
+        //只查询当前发车的
+        paramMap.put("publish",CarPublish.START);
+        List<DriverCar> list= driverCarMapper.selectNearDriverList(paramMap);
+        String prefix=REDIS_LAST_LOCATION;
+        List<List<Location>> rsList=new ArrayList<>();
+        for(DriverCar driverCar:list){
+            String key=prefix+driverCar.getId()+":"+driverCar.getDriverCarBatchId();
+            if(redisUtil.hasKey(key)){
+                List<Location> locations =redisUtil.get(key);
+                rsList.add(locations);
+            }
+        }
+        return Result.success().data(rsList);
+    }
+
+
+    private Map<String, Object> getRangeMap(Double longitude, Double latitude) {
+        //先计算查询点的经纬度范围
+        double r = 6371;//地球半径千米
+        double dis = 10;//10千米距离
+        double dlng = 2 * Math.asin(Math.sin(dis / (2 * r)) / Math.cos(latitude * Math.PI / 180));
+        dlng = dlng * 180 / Math.PI;//角度转为弧度
+        double dlat = dis / r;
+        dlat = dlat * 180 / Math.PI;
+        BigDecimal minlat = new BigDecimal(latitude - dlat).setScale(6, BigDecimal.ROUND_HALF_UP);
+        BigDecimal maxlat = new BigDecimal(latitude + dlat).setScale(6, BigDecimal.ROUND_HALF_UP);
+        BigDecimal minlng = new BigDecimal(longitude - dlng).setScale(6, BigDecimal.ROUND_HALF_UP);
+        BigDecimal maxlng = new BigDecimal(longitude + dlng).setScale(6, BigDecimal.ROUND_HALF_UP);
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("minlng", minlng);
+        paramMap.put("maxlng", maxlng);
+        paramMap.put("minlat", minlat);
+        paramMap.put("maxlat", maxlat);
+        return paramMap;
     }
 }

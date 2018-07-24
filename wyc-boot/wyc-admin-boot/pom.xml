@@ -47,6 +47,10 @@
         </dependency>
         <dependency>
             <groupId>com.ga.wyc</groupId>
+            <artifactId>wyc-biz-manager</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.ga.wyc</groupId>
             <artifactId>wyc-http</artifactId>
         </dependency>
         <dependency>

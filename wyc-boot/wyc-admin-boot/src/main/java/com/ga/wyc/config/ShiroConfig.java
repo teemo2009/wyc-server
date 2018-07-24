@@ -18,9 +18,8 @@ public class ShiroConfig extends BaseShiroConfig  {
     @Override
     public List<String> filterByAnon() {
         List<String> list=new ArrayList<>();
+        //不拦截
         list.add("/account/**");
-        //area 初始化接口
-        list.add("/area/init");
         return list;
     }
 }

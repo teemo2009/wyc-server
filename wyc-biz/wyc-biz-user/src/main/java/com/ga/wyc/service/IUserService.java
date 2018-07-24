@@ -3,6 +3,8 @@ package com.ga.wyc.service;
 import com.ga.wyc.domain.bean.Result;
 import com.ga.wyc.domain.entity.User;
 
+import java.math.BigDecimal;
+
 public interface IUserService {
       Result login(String phone,String code);
 
@@ -18,8 +20,11 @@ public interface IUserService {
       Result updateInfo(User user);
 
       Result getInfo(Long id);
+
       /**
        *  刷新坐标
        * */
       Result refreshLocation(Long driverCarId,Long driverCarBatchId);
+
+
 }

@@ -27,7 +27,7 @@ public class OrderController {
     MUtil mUtil;
 
     @PostMapping("/compute/price")
-    public Result computePrice(BigDecimal mile,Integer time){
+    public Result computePrice(@RequestParam("mile") BigDecimal mile,@RequestParam("time")Integer time){
         return orderSerive.computedPrice(mile,time);
     }
 

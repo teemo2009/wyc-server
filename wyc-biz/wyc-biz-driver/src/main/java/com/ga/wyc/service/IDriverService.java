@@ -6,6 +6,8 @@ import com.ga.wyc.domain.vo.DriverCarAddVo;
 import com.ga.wyc.domain.vo.DriverCarRefreshVo;
 import com.ga.wyc.domain.vo.DriverLoginVo;
 
+import java.math.BigDecimal;
+
 public interface IDriverService {
 
     //添加一个新的司机和对应的车
@@ -49,4 +51,10 @@ public interface IDriverService {
      *  刷新坐标
      * */
     Result refreshLocation(DriverCarRefreshVo driverCar);
+
+
+    /**
+     *  获取附近的司机坐标
+     * */
+    Result getNearDriverLocations(BigDecimal lng, BigDecimal lat);
 }
