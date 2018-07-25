@@ -17,6 +17,8 @@ public interface OrderMapper {
     Order selectByPrimaryKey(Long id);
 
     OrderDTO selectOrderDTOOne(Order record);
+    //用户正在执行的订单
+    OrderDTO selectUserOrderingOne(Order record);
 
     int updateByPrimaryKeySelective(Order record);
 

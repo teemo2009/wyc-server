@@ -105,6 +105,9 @@
             <if test="id!=null">
                 AND a.id=#{id,jdbcType=BIGINT}
             </if>
+            <if test="userId!=null">
+                AND a.user_id=#{userId,jdbcType=BIGINT}
+            </if>
             <if test="driverCarId!=null">
                 AND a.driver_car_id=#{driverCarId,jdbcType=BIGINT}
             </if>
@@ -115,6 +118,29 @@
                 AND a.state=#{state,jdbcType=INTEGER,typeHandler=com.ga.wyc.typeHandler.IntEnumTypeHandler}
             </if>
         </where>
+    </select>
+    <select id="selectUserOrderingOne" resultMap="OrderDTOMap" parameterType="com.ga.wyc.domain.entity.Order">
+        SELECT
+        a.* ,
+        b.`name` AS user_name,
+        b.phone AS user_phone,
+        b.gender AS user_gender,
+        d.id AS driver_id,
+        d.`name` AS driver_name,
+        d.phone AS driver_phone,
+        e.id AS car_id,
+        e.vehicle_no AS car_vehicle_no,
+        e.seats AS car_seats,
+        e.model AS car_model,
+        e.vehicle_type AS car_vehicle_type,
+        e.vehicle_color AS car_vehicle_color
+        FROM
+        t_order AS a
+        LEFT JOIN t_user AS b ON a.user_id=b.id
+        LEFT JOIN t_driver_car AS c ON a.driver_car_id = c.id
+        LEFT JOIN t_driver AS d ON c.driver_id = d.id
+        LEFT JOIN t_car AS e ON c.car_id = e.id
+        WHERE a.user_id=#{userId,jdbcType=BIGINT} AND a.state IN (1,2,3,4)
     </select>
     <select id="selectNearOrderList" resultMap="OrderDTOMap" parameterType="java.util.Map">
         SELECT a.*,
@@ -162,7 +188,7 @@
         <include refid="Base_Column_List"/>
         from t_order
         where user_id=#{userId,jdbcType=BIGINT}
-        AND state in(1,2,3)
+        AND state in(1,2,3,4)
     </select>
     <select id="driverHasOrdering" resultMap="BaseResultMap" parameterType="java.lang.Long">
         select

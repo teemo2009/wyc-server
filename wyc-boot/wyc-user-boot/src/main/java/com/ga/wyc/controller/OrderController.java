@@ -52,8 +52,8 @@ public class OrderController {
      *  客户端 刷新订单
      * */
     @GetMapping("/user/refresh")
-    public Result refreshUserOrder(@RequestParam("id") Long id){
-        return orderSerive.refreshUserOrder(id);
+    public Result refreshUserOrder(@RequestParam("userId") Long userId){
+        return orderSerive.refreshUserOrder(userId);
     }
 
     /**

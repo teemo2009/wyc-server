@@ -65,7 +65,7 @@ public interface IOrderSerive {
         /**
          *  刷取 客户端 的 订单,判断是否有司机接单
          */
-        Result refreshUserOrder(Long id);
+        Result refreshUserOrder(Long userId);
 
         /**
          *  根据订单查询范围内的司机---发车状态

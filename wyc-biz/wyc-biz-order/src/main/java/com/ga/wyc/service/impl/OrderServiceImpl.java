@@ -335,13 +335,10 @@ public class OrderServiceImpl implements IOrderSerive {
     }
 
     @Override
-    public Result refreshUserOrder(Long id) {
-        OrderDTO orderDTO = orderMapper.selectOrderDTOOne(new Order().setId(id));
+    public Result refreshUserOrder(Long userId) {
+        OrderDTO orderDTO = orderMapper.selectUserOrderingOne(new Order().setUserId(userId));
         if(ObjectUtils.isEmpty(orderDTO)){
-            throw new BusinessException("订单不存在");
-        }
-        if ( orderDTO.getState().equals(OrderState.INIT)) {
-            return Result.success().message("没有司机接单");
+            throw new BusinessException("当前没有订单");
         }
         return Result.success().data(orderDTO);
     }
